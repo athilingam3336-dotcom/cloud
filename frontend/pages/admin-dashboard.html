@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CloudCrackers Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--sky-800);
+            border: 1px solid var(--sky-line);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        #toastContainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .dashboard-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--gold);
+            margin: 24px 0 12px 0;
+            border-bottom: 1px dashed var(--sky-line);
+            padding-bottom: 6px;
+        }
+        .tab-link {
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            color: var(--muted);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .tab-link.active {
+            background: var(--sky-900);
+            color: var(--gold);
+            font-weight: 600;
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 8px;
+        }
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -31px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--sky-900);
+            border: 2px solid var(--gold);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-body">
+        <aside class="admin-sidebar">
+            <a href="admin-dashboard.html"><span class="logo-text">Cloud<em>Crackers</em></span></a>
+            <nav class="admin-nav">
+                <div class="nav-label">Main</div>
+                <a href="admin-dashboard.html" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="admin-orders.html" class=""><i class="fa-solid fa-box"></i> Orders</a>
+                <a href="admin-products.html" class=""><i class="fa-solid fa-fire"></i> Products</a>
+                <a href="admin-categories.html" class=""><i class="fa-solid fa-tags"></i> Categories</a>
+                <a href="admin-users.html" class=""><i class="fa-solid fa-users"></i> Users</a>
+                <div class="nav-label">Settings</div>
+                <a href="admin-profile.html" class=""><i class="fa-solid fa-user-gear"></i> Profile</a>
+                <a href="admin-settings.html" class=""><i class="fa-solid fa-gears"></i> App Settings</a>
+                <div class="nav-label">Other</div>
+                <a href="../index.html"><i class="fa-solid fa-store"></i> View Store</a>
+            </nav>
+            <div class="admin-sidebar-foot">
+                <div class="profile-nav"><a href="#" id="logoutLink"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h1>Dashboard Overview</h1>
+                <div class="admin-topbar-right">
+                    <i class="fa-regular fa-bell" style="color:var(--muted); cursor:pointer;"></i>
+                    <div class="table-avatar" id="adminAvatarHeader">CC</div>
+                </div>
+            </div>
+            <div class="admin-content">
+                
+                <!-- Section 1: Revenue Metrics -->
+                <div class="dashboard-section-title">Revenue Analytics</div>
+                <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon gold"><i class="fa-solid fa-indian-rupee-sign"></i></div></div>
+                        <div class="stat-value" id="totalRevenue">₹0</div>
+                        <div class="stat-label">Total Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon green"><i class="fa-solid fa-calendar-day"></i></div></div>
+                        <div class="stat-value" id="todayRevenue">₹0</div>
+                        <div class="stat-label">Today's Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon cyan"><i class="fa-solid fa-calendar-week"></i></div></div>
+                        <div class="stat-value" id="weeklyRevenue">₹0</div>
+                        <div class="stat-label">Weekly Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon purple" style="background:rgba(155, 89, 182, 0.15); color:#9b59b6;"><i class="fa-solid fa-calendar-days"></i></div></div>
+                        <div class="stat-value" id="monthlyRevenue">₹0</div>
+                        <div class="stat-label">Monthly Revenue</div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Orders Metrics -->
+                <div class="dashboard-section-title">Order Statuses</div>
+                <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon cyan"><i class="fa-solid fa-boxes-stacked"></i></div></div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon gold"><i class="fa-solid fa-clock"></i></div></div>
+                        <div class="stat-value" id="pendingOrders">0</div>
+                        <div class="stat-label">Pending Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon green"><i class="fa-solid fa-truck-ramp-box"></i></div></div>
+                        <div class="stat-value" id="deliveredOrders">0</div>
+                        <div class="stat-label">Delivered Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon ember"><i class="fa-solid fa-ban"></i></div></div>
+                        <div class="stat-value" id="cancelledOrders">0</div>
+                        <div class="stat-label">Cancelled Orders</div>
+                    </div>
+                </div>
+
+                <!-- Section 3: User & Inventory Metrics -->
+                <div class="dashboard-section-title">Users & Catalog</div>
+                <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon ember"><i class="fa-solid fa-users"></i></div></div>
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-label">Total Customers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon green"><i class="fa-solid fa-user-check"></i></div></div>
+                        <div class="stat-value" id="activeUsers">0</div>
+                        <div class="stat-label">Active Customers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon purple" style="background:rgba(155, 89, 182, 0.15); color:#9b59b6;"><i class="fa-solid fa-fire"></i></div></div>
+                        <div class="stat-value" id="totalProducts">0</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon gold"><i class="fa-solid fa-circle-exclamation"></i></div></div>
+                        <div class="stat-value" id="outOfStockProducts">0</div>
+                        <div class="stat-label">Out of Stock Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-top"><div class="stat-icon cyan"><i class="fa-solid fa-tags"></i></div></div>
+                        <div class="stat-value" id="totalCategories">0</div>
+                        <div class="stat-label">Total Categories</div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Charts Grid -->
+                <div class="dashboard-section-title">Visual Analytics</div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px;">
+                    <div class="card" style="padding:20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                            <h3 style="font-size:14px; font-weight:600;">Revenue Trends</h3>
+                            <select id="revenueChartRange" class="form-control" style="width:100px; height:30px; font-size:12px; padding:4px 8px;">
+                                <option value="daily">Daily (7d)</option>
+                                <option value="weekly">Weekly (4w)</option>
+                                <option value="monthly">Monthly (6m)</option>
+                            </select>
+                        </div>
+                        <canvas id="revenueChart" style="max-height:220px;"></canvas>
+                    </div>
+                    <div class="card" style="padding:20px;">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:16px;">Order Status Distribution</h3>
+                        <canvas id="ordersChart" style="max-height:220px;"></canvas>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px; margin-top:20px;">
+                    <div class="card" style="padding:20px;">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:16px;">Top Categories by Revenue</h3>
+                        <canvas id="categoriesChart" style="max-height:220px;"></canvas>
+                    </div>
+                    <div class="card" style="padding:20px;">
+                        <h3 style="font-size:14px; font-weight:600; margin-bottom:16px;">Top Selling Products</h3>
+                        <canvas id="productsChart" style="max-height:220px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Section 5: Tabbed Tables -->
+                <div class="dashboard-section-title">Database Records</div>
+                <div class="card" style="margin-top:12px;">
+                    <div class="card-header" style="border-bottom:1px solid var(--sky-line); padding:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+                        <div style="display:flex; gap:12px; flex-wrap:wrap;" id="dashboardTableTabs">
+                            <a href="#" class="tab-link active" data-table="orders">Latest Orders</a>
+                            <a href="#" class="tab-link" data-table="customers">Latest Customers</a>
+                            <a href="#" class="tab-link" data-table="products">Recently Added</a>
+                            <a href="#" class="tab-link" data-table="lowstock">Low Stock Alerts</a>
+                        </div>
+                        <input type="text" id="dashboardTableSearch" class="form-control" placeholder="Search active table..." style="width:220px; height:34px; font-size:13px;">
+                    </div>
+                    <table class="data-table" id="dashboardTable">
+                        <thead id="dashboardTableHead">
+                            <!-- Filled dynamically -->
+                        </thead>
+                        <tbody id="dashboardTableBody">
+                            <!-- Filled dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="pagination" id="dashboardTablePagination" style="padding:16px;"></div>
+                </div>
+
+                <!-- Section 6: Latest Orders Timeline -->
+                <div class="dashboard-section-title">Activity Timeline</div>
+                <div class="card" style="padding:24px;">
+                    <h3 style="font-size:14px; font-weight:600; margin-bottom:18px;">Recent Order Placement Log</h3>
+                    <div id="ordersTimelineContainer" style="margin-top:8px; display:flex; flex-direction:column; gap:20px; position:relative; padding-left:24px; border-left:2px solid var(--sky-line); margin-left:12px;">
+                        <!-- Timeline entries filled dynamically -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/components/toast.js"></script>
+    <script src="../js/components/modal.js"></script>
+    <script src="../js/components/loader.js"></script>
+    <script src="../js/components/pagination.js"></script>
+    <script src="../js/helpers/format.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/pages/dashboard.js"></script>
+</body>
+</html>

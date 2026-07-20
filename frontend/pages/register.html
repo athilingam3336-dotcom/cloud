@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | CloudCrackers</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-visual">
+            <div>
+                <span class="eyebrow">Join CloudCrackers</span>
+                <h2>Create An Account, <span class="highlight">Unlock The Sale</span></h2>
+            </div>
+        </div>
+        <div class="auth-form-side">
+            <div class="auth-card">
+                
+                <!-- Skeleton Loader -->
+                <div class="skeleton-wrapper" id="authSkeleton">
+                    <div class="skeleton sk-title"></div>
+                    <div class="skeleton sk-text"></div>
+                    <div class="skeleton sk-label"></div>
+                    <div class="skeleton sk-input" style="height:40px;"></div>
+                    <div class="skeleton sk-label"></div>
+                    <div class="skeleton sk-input" style="height:40px;"></div>
+                    <div class="skeleton sk-label"></div>
+                    <div class="skeleton sk-input" style="height:40px;"></div>
+                    <div class="skeleton sk-button"></div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="auth-card-content" id="authContent">
+                    <a href="../index.html" class="auth-brand" aria-label="Go to CloudCrackers Home">
+                        <span class="logo-text">Cloud<em>Crackers</em></span>
+                    </a>
+                    
+                    <h1 style="margin-top:22px;">Create Account</h1>
+                    <p class="muted-text">Sign up to start shopping this Diwali.</p>
+
+                    <form id="registerForm" novalidate>
+                        
+                        <div class="form-row" style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <div class="form-group" style="flex: 1; min-width: 120px;">
+                                <label for="fname">First Name</label>
+                                <div class="input-group">
+                                    <i class="fa-regular fa-user input-icon" aria-hidden="true" style="left: 12px; font-size: 0.9rem;"></i>
+                                    <input class="form-control" type="text" id="fname" placeholder="Arun" required style="padding-left: 36px;" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group" style="flex: 1; min-width: 120px;">
+                                <label for="lname">Last Name</label>
+                                <div class="input-group">
+                                    <i class="fa-regular fa-user input-icon" aria-hidden="true" style="left: 12px; font-size: 0.9rem;"></i>
+                                    <input class="form-control" type="text" id="lname" placeholder="Kumar" required style="padding-left: 36px;" aria-required="true">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="remail">Email Address</label>
+                            <div class="input-group">
+                                <i class="fa-regular fa-envelope input-icon" aria-hidden="true"></i>
+                                <input class="form-control" type="email" id="remail" placeholder="you@example.com" required aria-required="true" autocomplete="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rphone">Phone Number</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-phone input-icon" aria-hidden="true"></i>
+                                <input class="form-control" type="tel" id="rphone" placeholder="+91 98765 43210" autocomplete="tel">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rpassword">Password</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+                                <input class="form-control" type="password" id="rpassword" placeholder="Create a password" required aria-required="true" autocomplete="new-password">
+                                <button type="button" class="input-toggle" data-toggle-password="rpassword" aria-label="Toggle password visibility">
+                                    <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Password Strength Indicator -->
+                            <div class="password-strength-container" id="passwordStrengthSection" style="display:none; margin-top: 10px;">
+                                <div class="strength-bar-wrapper">
+                                    <div class="strength-bar" id="strengthBar"></div>
+                                </div>
+                                <div class="strength-text" id="strengthText">Strength: Weak</div>
+                                <ul class="strength-criteria">
+                                    <li id="critLength"><i class="fa-regular fa-circle" aria-hidden="true"></i> At least 8 characters</li>
+                                    <li id="critUpper"><i class="fa-regular fa-circle" aria-hidden="true"></i> At least 1 uppercase letter</li>
+                                    <li id="critLower"><i class="fa-regular fa-circle" aria-hidden="true"></i> At least 1 lowercase letter</li>
+                                    <li id="critDigit"><i class="fa-regular fa-circle" aria-hidden="true"></i> At least 1 number</li>
+                                    <li id="critSpecial"><i class="fa-regular fa-circle" aria-hidden="true"></i> At least 1 special character (@$!%*?&#)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label class="form-check" style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; color: var(--muted); cursor: pointer;">
+                                <input type="checkbox" required aria-required="true" style="margin-top: 4px;">
+                                <span>I agree to the <a href="#" style="color:var(--gold); text-decoration: underline;">Terms &amp; Conditions</a></span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block" style="width:100%; margin-top: 10px;">Create Account</button>
+                    </form>
+
+                    <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js?v=3"></script>
+    <script src="../js/api.js?v=3"></script>
+    <script src="../js/auth.js?v=3"></script>
+</body>
+</html>

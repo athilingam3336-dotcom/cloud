@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | CloudCrackers</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+</head>
+<body>
+    <header class="announcement-bar">
+        <div class="container">
+            <div class="announcement-left">
+                <i class="fa-solid fa-fire"></i>
+                <span>Diwali Mega Sale • Flat 30% OFF on Selected Fireworks</span>
+            </div>
+            <div class="announcement-right">
+                <div class="announcement-item"><i class="fa-solid fa-truck-fast"></i><span>Free Delivery Above ₹999</span></div>
+                <div class="announcement-item"><i class="fa-solid fa-shield-halved"></i><span>100% Safety Certified</span></div>
+                <div class="announcement-item"><i class="fa-solid fa-phone"></i><span>Support : +91 98765 43210</span></div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><a href="../index.html"><span class="logo-text">Cloud<em>Crackers</em></span></a></div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="../index.html#categories">Categories</a></li>
+                <li><a href="../index.html#offers">Offers</a></li>
+                <li><a href="../index.html#about">About</a></li>
+                <li><a href="../index.html#contact">Contact</a></li>
+            </ul>
+            <div class="search-box">
+                <input type="text" placeholder="Search Fireworks...">
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="nav-icons">
+                <a href="profile.html"><i class="fa-regular fa-user"></i></a>
+                <a href="wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i><span class="cart-count" id="cartCount">0</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><span class="current">My Orders</span></div>
+        <div class="page-header"><h1>My Orders</h1></div>
+        <div class="tabs" id="orderTabs">
+            <a href="#" class="active" data-filter="ALL">All</a>
+            <a href="#" data-filter="PENDING">Pending</a>
+            <a href="#" data-filter="PROCESSING">Processing</a>
+            <a href="#" data-filter="DELIVERED">Delivered</a>
+            <a href="#" data-filter="CANCELLED">Cancelled</a>
+        </div>
+    </div>
+
+    <!-- Success banner (shown after checkout redirect) -->
+    <div class="container" id="orderSuccessBanner" style="display:none;">
+        <div class="alert alert-success">
+            <i class="fa-solid fa-circle-check"></i>
+            <span id="orderSuccessMsg">Order placed successfully!</span>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="ordersLoading" class="container" style="text-align:center; padding:60px 0;">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size:32px; color:var(--gold);"></i>
+        <p class="muted-text" style="margin-top:14px;">Loading your orders...</p>
+    </div>
+
+    <!-- Empty -->
+    <div id="ordersEmpty" class="container" style="display:none;">
+        <div class="empty-state">
+            <i class="fa-solid fa-box-open"></i>
+            <h3>No Orders Yet</h3>
+            <p>You haven't placed any orders. Start shopping!</p>
+            <a href="products.html" class="btn btn-primary" style="margin-top:18px;">Shop Now</a>
+        </div>
+    </div>
+
+    <!-- Orders list -->
+    <div class="container" id="ordersContainer" style="padding-bottom:80px; display:none;"></div>
+
+    <!-- Order detail modal (inline expand) -->
+    <div id="orderDetailModal" style="
+        display:none; position:fixed; inset:0; background:rgba(11,17,32,0.85);
+        z-index:500; align-items:center; justify-content:center; padding:20px;">
+        <div class="card" style="max-width:640px; width:100%; max-height:80vh; overflow-y:auto; position:relative;">
+            <button id="closeModal" style="position:absolute; top:16px; right:16px; color:var(--muted); font-size:20px; background:none; border:none; cursor:pointer;">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="orderDetailContent"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer" id="contact">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <span class="logo-text">Cloud<em>Crackers</em></span>
+                <p>Certified-safe fireworks, delivered pan-India. Celebrate bright, celebrate safe.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Shop</h4>
+                <a href="products.html">Sparklers</a>
+                <a href="products.html">Rockets</a>
+                <a href="products.html">Gift Boxes</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="orders.html">Track Order</a>
+                <a href="#">Safety Guide</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><i class="fa-solid fa-phone"></i> +91 98765 43210</p>
+                <p><i class="fa-solid fa-envelope"></i> hello@cloudcrackers.in</p>
+            </div>
+        </div>
+        <div class="footer-bottom container"><span>© 2026 CloudCrackers. All rights reserved.</span></div>
+    </footer>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/orders.js"></script>
+</body>
+</html>

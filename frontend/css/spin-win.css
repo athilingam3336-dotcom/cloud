@@ -1,0 +1,1051 @@
+/* ==========================================================================
+   CloudCrackers — Spin & Win Page Styles
+   Theme: Diwali Premium Festival
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Page Background & Fireworks Sky
+   -------------------------------------------------------------------------- */
+
+.spin-page {
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 20% 10%, #1a0a2e 0%, #0B1F3A 40%, #060d1a 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Floating stars */
+.stars-layer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.star-dot {
+    position: absolute;
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+    background: #fff;
+    opacity: 0;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: var(--bright, 0.8); transform: scale(1); }
+}
+
+/* Floating firework bursts background */
+.fw-burst {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: fwFloat var(--dur, 8s) ease-in-out infinite var(--delay, 0s);
+    opacity: 0;
+    filter: blur(1px);
+}
+
+@keyframes fwFloat {
+    0% { opacity: 0; transform: scale(0) translate(0, 0); }
+    10% { opacity: 0.6; }
+    60% { opacity: 0.3; }
+    100% { opacity: 0; transform: scale(2.5) translate(var(--tx, 20px), var(--ty, -30px)); }
+}
+
+/* --------------------------------------------------------------------------
+   Spin-page Header
+   -------------------------------------------------------------------------- */
+
+.spin-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11, 31, 58, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+    padding: 0 24px;
+}
+
+.spin-header .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 16px;
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.spin-header .logo-text {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--paper);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+}
+
+.spin-header .logo-text em {
+    font-style: normal;
+    color: var(--gold);
+}
+
+.spin-header-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.spin-header-nav a {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    text-decoration: none;
+}
+
+.spin-header-nav a:hover { color: #FFD700; }
+
+.spin-header-nav a.btn-primary-sm {
+    background: linear-gradient(135deg, #FFD700, #FF7A00);
+    color: #0B1F3A;
+    padding: 9px 22px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(255, 122, 0, 0.3);
+}
+
+.spin-header-nav a.btn-primary-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 122, 0, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   Hero Banner
+   -------------------------------------------------------------------------- */
+
+.spin-hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 56px 24px 0;
+}
+
+.spin-hero .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: #FFD700;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: var(--font-display);
+}
+
+.spin-hero .eyebrow .star-icon {
+    display: inline-block;
+    animation: spin-icon 4s linear infinite;
+}
+
+@keyframes spin-icon {
+    to { transform: rotate(360deg); }
+}
+
+.spin-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.spin-hero h1 .gold-text {
+    background: linear-gradient(135deg, #FFD700 0%, #FF7A00 50%, #FFD700 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    to { background-position: 200% center; }
+}
+
+.spin-hero p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 500px;
+    margin: 0 auto 8px;
+    line-height: 1.7;
+}
+
+/* --------------------------------------------------------------------------
+   Main Wheel Section
+   -------------------------------------------------------------------------- */
+
+.spin-main {
+    position: relative;
+    z-index: 1;
+    padding: 40px 24px 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+/* --------------------------------------------------------------------------
+   Wheel Container
+   -------------------------------------------------------------------------- */
+
+.wheel-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+}
+
+.wheel-wrapper {
+    position: relative;
+    width: 380px;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Glow rings behind wheel */
+.wheel-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 430px;
+    height: 430px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    animation: pulseGlow 2.5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.wheel-glow-2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 215, 0, 0.15);
+    animation: pulseGlow 2.5s ease-in-out infinite 0.8s;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* Pointer/Arrow */
+.wheel-pointer {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    filter: drop-shadow(0 4px 10px rgba(255, 122, 0, 0.8));
+}
+
+/* Canvas wheel */
+#spinWheel {
+    position: relative;
+    z-index: 2;
+    border-radius: 50%;
+    box-shadow:
+        0 0 0 5px rgba(255, 215, 0, 0.35),
+        0 0 0 10px rgba(255, 215, 0, 0.1),
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 80px rgba(255, 122, 0, 0.15);
+    cursor: default;
+    transition: box-shadow 0.3s;
+    display: block;
+    flex-shrink: 0; /* Prevent flex container from compressing canvas */
+}
+
+#spinWheel.spinning {
+    box-shadow:
+        0 0 0 5px rgba(255, 215, 0, 0.7),
+        0 0 0 10px rgba(255, 215, 0, 0.25),
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 120px rgba(255, 122, 0, 0.5);
+}
+
+/* Center hub */
+.wheel-hub {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff 0%, #FFD700 30%, #FF7A00 65%, #c44f00 100%);
+    box-shadow:
+        0 0 0 4px rgba(255, 215, 0, 0.5),
+        0 0 20px rgba(255, 122, 0, 0.7),
+        inset 0 2px 4px rgba(255,255,255,0.3);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    animation: hubPulse 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes hubPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(255,215,0,0.5), 0 0 20px rgba(255,122,0,0.7), inset 0 2px 4px rgba(255,255,255,0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(255,215,0,0.2), 0 0 40px rgba(255,122,0,0.9), inset 0 2px 4px rgba(255,255,255,0.3); }
+}
+
+/* --------------------------------------------------------------------------
+   Spin Button
+   -------------------------------------------------------------------------- */
+
+.spin-btn-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+#spinBtn {
+    position: relative;
+    padding: 18px 60px;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #0B1F3A;
+    background: linear-gradient(135deg, #FFD700 0%, #FF7A00 100%);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 32px rgba(255, 122, 0, 0.45), 0 2px 6px rgba(0,0,0,0.3);
+}
+
+#spinBtn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    transition: left 0.5s;
+}
+
+#spinBtn:hover:not(:disabled)::before { left: 100%; }
+
+#spinBtn:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 14px 40px rgba(255, 122, 0, 0.65), 0 4px 12px rgba(0,0,0,0.3);
+}
+
+#spinBtn:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+}
+
+#spinBtn:disabled {
+    background: linear-gradient(135deg, #3a3a3a, #222);
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+#spinBtn .btn-icon {
+    margin-right: 10px;
+    display: inline-block;
+}
+
+#spinBtn:hover:not(:disabled) .btn-icon {
+    animation: spinIconAnim 0.6s linear infinite;
+}
+
+@keyframes spinIconAnim {
+    to { transform: rotate(360deg); }
+}
+
+.spin-status-msg {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+    text-align: center;
+    min-height: 22px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.spin-status-msg.used {
+    color: #FFD700;
+}
+
+/* --------------------------------------------------------------------------
+   Already Spun Notice
+   -------------------------------------------------------------------------- */
+
+.already-spun-notice {
+    background: rgba(255, 215, 0, 0.06);
+    border: 1px solid rgba(255, 215, 0, 0.22);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    max-width: 440px;
+    width: 100%;
+}
+
+.already-spun-notice .asn-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.already-spun-notice strong {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #FFD700;
+    margin-bottom: 4px;
+}
+
+.already-spun-notice p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Reward Legend Section
+   -------------------------------------------------------------------------- */
+
+.rewards-section {
+    position: relative;
+    z-index: 1;
+    padding: 0 24px 64px;
+}
+
+.rewards-section .inner {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.section-title h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.section-title p {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.875rem;
+}
+
+.rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.reward-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 215, 0, 0.12);
+    border-radius: 16px;
+    padding: 20px 14px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: transform 0.25s, background 0.25s, border-color 0.25s, box-shadow 0.25s;
+    cursor: default;
+}
+
+.reward-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 215, 0, 0.07);
+    border-color: rgba(255, 215, 0, 0.35);
+    box-shadow: 0 10px 30px rgba(255, 122, 0, 0.15);
+}
+
+.reward-card .rc-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    display: block;
+    line-height: 1;
+}
+
+.reward-card .rc-label {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #FFD700;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.reward-card .rc-desc {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.4);
+}
+
+.reward-card.highlight {
+    background: rgba(255, 122, 0, 0.08);
+    border-color: rgba(255, 122, 0, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   Terms & Conditions
+   -------------------------------------------------------------------------- */
+
+.terms-section {
+    position: relative;
+    z-index: 1;
+    padding: 0 24px 64px;
+}
+
+.terms-section .inner {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.terms-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 20px;
+    padding: 32px 36px;
+    backdrop-filter: blur(12px);
+}
+
+.terms-card h3 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #FFD700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.terms-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.terms-list li {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.5);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.6;
+}
+
+.terms-list li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: rgba(255, 215, 0, 0.5);
+    font-size: 9px;
+    top: 5px;
+}
+
+/* --------------------------------------------------------------------------
+   Previous Rewards Section
+   -------------------------------------------------------------------------- */
+
+.prev-rewards-section {
+    position: relative;
+    z-index: 1;
+    padding: 0 24px 64px;
+}
+
+.prev-rewards-section .inner {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.prev-rewards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.recent-reward-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    transition: background 0.2s;
+    gap: 12px;
+}
+
+.recent-reward-item:hover {
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.recent-reward-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.recent-reward-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255, 215, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.recent-reward-text strong {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.recent-reward-text span {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.35);
+}
+
+.recent-reward-code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #FFD700;
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.spin-footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 36px 24px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.spin-footer .logo-text {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    text-decoration: none;
+}
+
+.spin-footer .logo-text em {
+    font-style: normal;
+    color: #FFD700;
+}
+
+.spin-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 16px 0 12px;
+    flex-wrap: wrap;
+}
+
+.spin-footer-links a {
+    color: rgba(255,255,255,0.35);
+    font-size: 0.8rem;
+    transition: color 0.2s;
+    text-decoration: none;
+}
+
+.spin-footer-links a:hover { color: #FFD700; }
+
+.spin-footer p {
+    color: rgba(255,255,255,0.25);
+    font-size: 0.78rem;
+    margin-top: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   POPUP / Modal
+   -------------------------------------------------------------------------- */
+
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease, background 0.4s ease, backdrop-filter 0.4s ease;
+}
+
+.popup-overlay.active {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(10px);
+    pointer-events: all;
+}
+
+.popup-card {
+    background: linear-gradient(145deg, rgba(20, 34, 80, 0.97), rgba(8, 14, 38, 0.99));
+    border: 1px solid rgba(255, 215, 0, 0.28);
+    border-radius: 28px;
+    padding: 52px 40px 40px;
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    box-shadow:
+        0 0 0 1px rgba(255, 215, 0, 0.08),
+        0 32px 80px rgba(0, 0, 0, 0.75),
+        0 0 60px rgba(255, 122, 0, 0.12);
+    transform: scale(0.8) translateY(50px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+}
+
+.popup-overlay.active .popup-card {
+    transform: scale(1) translateY(0);
+}
+
+.popup-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #FFD700, #FF7A00, #FF4D6D, #FF7A00, #FFD700);
+    background-size: 300% auto;
+    animation: shimmer 2.5s linear infinite;
+}
+
+.popup-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255,255,255,0.55);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.popup-close:hover {
+    background: rgba(255, 78, 78, 0.2);
+    color: #ff6b6b;
+    transform: rotate(90deg);
+}
+
+.popup-emoji {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    display: block;
+    animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+}
+
+@keyframes popIn {
+    from { transform: scale(0) rotate(-15deg); opacity: 0; }
+    to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.popup-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #FF7A00;
+    margin-bottom: 6px;
+    font-family: var(--font-display);
+}
+
+.popup-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.popup-reward-badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #FFD700, #FF7A00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 14px;
+    padding: 2px 0;
+}
+
+.popup-desc {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.875rem;
+    margin-bottom: 28px;
+    line-height: 1.65;
+}
+
+/* Coupon box */
+.coupon-box {
+    background: rgba(255, 215, 0, 0.06);
+    border: 1.5px dashed rgba(255, 215, 0, 0.4);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.coupon-left {
+    text-align: left;
+}
+
+.coupon-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.coupon-code {
+    font-family: 'Courier New', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #FFD700;
+    letter-spacing: 3px;
+}
+
+.coupon-copy-btn {
+    background: rgba(255, 215, 0, 0.12);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 10px;
+    color: #FFD700;
+    padding: 10px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    font-family: var(--font-body);
+}
+
+.coupon-copy-btn:hover {
+    background: rgba(255, 215, 0, 0.22);
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: scale(1.04);
+}
+
+.coupon-copy-btn.copied {
+    background: rgba(77, 208, 225, 0.12);
+    border-color: rgba(77, 208, 225, 0.35);
+    color: #4DD0E1;
+}
+
+.popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-popup-primary {
+    padding: 15px 28px;
+    border-radius: 50px;
+    font-family: var(--font-display);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #FFD700, #FF7A00);
+    color: #0B1F3A;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 20px rgba(255, 122, 0, 0.35);
+}
+
+.btn-popup-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 122, 0, 0.55);
+}
+
+.btn-popup-secondary {
+    padding: 13px 28px;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: transparent;
+    color: rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+}
+
+.btn-popup-secondary:hover {
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.75);
+    border-color: rgba(255,255,255,0.22);
+}
+
+/* --------------------------------------------------------------------------
+   Confetti & Fireworks Canvas
+   -------------------------------------------------------------------------- */
+
+#confettiCanvas,
+#fireworksCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Floating Cracker Emojis (bg decoration)
+   -------------------------------------------------------------------------- */
+
+.floating-cracker {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    font-size: var(--sz, 1.5rem);
+    opacity: 0.1;
+    animation: floatCracker var(--dur, 12s) linear infinite var(--delay, 0s);
+    top: 110%;
+}
+
+@keyframes floatCracker {
+    0%  { top: 110%; opacity: 0.07; transform: translateX(0) rotate(0deg); }
+    50% { opacity: 0.14; transform: translateX(var(--drift, 30px)) rotate(180deg); }
+    100%{ top: -10%; opacity: 0; transform: translateX(0) rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Entry Animations
+   -------------------------------------------------------------------------- */
+
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(28px);
+    animation: fadeInUp 0.7s ease forwards both;
+}
+.fade-in-up.d1 { animation-delay: 0.1s; }
+.fade-in-up.d2 { animation-delay: 0.25s; }
+.fade-in-up.d3 { animation-delay: 0.4s; }
+.fade-in-up.d4 { animation-delay: 0.55s; }
+
+@keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Guarantee the wheel and button are always visible regardless of animation support */
+.wheel-container,
+.spin-btn-wrap {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* Reduced-motion safe fallback: make fade-in-up elements visible immediately */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in-up {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+    .spin-header-nav a:not(.btn-primary-sm) { display: none; }
+
+    .wheel-wrapper { width: 300px; height: 300px; }
+    .wheel-glow  { width: 355px; height: 355px; }
+    .wheel-glow-2{ width: 320px; height: 320px; }
+    .wheel-hub   { width: 50px; height: 50px; font-size: 1.1rem; }
+
+    #spinWheel { width: 300px !important; height: 300px !important; }
+
+    #spinBtn { padding: 15px 44px; font-size: 0.95rem; }
+
+    .popup-card { padding: 44px 22px 32px; }
+    .coupon-box { flex-direction: column; text-align: center; }
+    .coupon-left { text-align: center; width: 100%; }
+    .coupon-copy-btn { width: 100%; justify-content: center; }
+
+    .terms-card { padding: 24px 20px; }
+    .rewards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 400px) {
+    .rewards-grid { grid-template-columns: 1fr 1fr; }
+    #spinBtn { padding: 13px 32px; font-size: 0.88rem; }
+}

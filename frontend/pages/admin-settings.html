@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Settings | CloudCrackers Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--sky-800);
+            border: 1px solid var(--sky-line);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        #toastContainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        #logoDropZone.dragover {
+            border-color: var(--gold) !important;
+            background: rgba(242, 183, 5, 0.05) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-body">
+        <aside class="admin-sidebar">
+            <a href="admin-dashboard.html"><span class="logo-text">Cloud<em>Crackers</em></span></a>
+            <nav class="admin-nav">
+                <div class="nav-label">Main</div>
+                <a href="admin-dashboard.html" class=""><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="admin-orders.html" class=""><i class="fa-solid fa-box"></i> Orders</a>
+                <a href="admin-products.html" class=""><i class="fa-solid fa-fire"></i> Products</a>
+                <a href="admin-categories.html" class=""><i class="fa-solid fa-tags"></i> Categories</a>
+                <a href="admin-users.html" class=""><i class="fa-solid fa-users"></i> Users</a>
+                <div class="nav-label">Settings</div>
+                <a href="admin-profile.html" class=""><i class="fa-solid fa-user-gear"></i> Profile</a>
+                <a href="admin-settings.html" class="active"><i class="fa-solid fa-gears"></i> App Settings</a>
+                <div class="nav-label">Other</div>
+                <a href="../index.html"><i class="fa-solid fa-store"></i> View Store</a>
+            </nav>
+            <div class="admin-sidebar-foot">
+                <div class="profile-nav"><a href="#" id="logoutLink"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h1>App & Store Settings</h1>
+                <div class="admin-topbar-right">
+                    <i class="fa-regular fa-bell" style="color:var(--muted); cursor:pointer;"></i>
+                    <div class="table-avatar" id="adminAvatarHeader">AD</div>
+                </div>
+            </div>
+            <div class="admin-content">
+                <div class="card" style="max-width: 600px; margin: 0 auto; padding: 28px;">
+                    <h2 style="font-family:var(--font-display); font-size:15px; margin-bottom:20px; color:var(--gold); border-bottom:1px dashed var(--sky-line); padding-bottom:8px;"><i class="fa-solid fa-sliders"></i> Global Variables Configurations</h2>
+                    
+                    <form id="settingsForm">
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">Store Name</label>
+                            <input type="text" id="settingsStoreName" class="form-control" required placeholder="e.g. CloudCrackers E-Commerce">
+                        </div>
+
+                        <!-- Brand Logo upload dropzone -->
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">Store Logo</label>
+                            <div style="display:flex; gap:16px; align-items:center;">
+                                <div id="storeLogoPreviewContainer" style="width:50px; height:50px; border-radius:4px; border:1px solid var(--sky-line); background:var(--sky-900); display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                                    <!-- logo img -->
+                                </div>
+                                <div id="logoDropZone" style="border:1.5px dashed var(--sky-line); border-radius:4px; padding:12px; text-align:center; cursor:pointer; flex:1; font-size:11px; color:var(--muted);">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> Drop Logo here or Click to upload
+                                    <input type="file" id="logoImageFile" accept="image/*" style="display:none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">Contact Email</label>
+                            <input type="email" id="settingsContactEmail" class="form-control" required placeholder="e.g. support@cloudcrackers.com">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">Tax Rate (%)</label>
+                            <input type="number" id="settingsTaxRate" class="form-control" step="0.1" min="0" required placeholder="e.g. 18.0">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">Flat Shipping Charge (₹)</label>
+                            <input type="number" id="settingsShippingCharge" class="form-control" min="0" required placeholder="e.g. 80">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">Display Currency</label>
+                            <select id="settingsCurrency" class="form-control" required>
+                                <option value="INR">INR (₹)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; padding:12px; background:rgba(0,0,0,0.15); border:1px solid var(--sky-line); border-radius:4px;">
+                            <div>
+                                <label style="display:block; font-size:12.5px; font-weight:600; color:var(--gold);">Maintenance Mode</label>
+                                <span style="font-size:11px; color:var(--muted);">Block store visitors from checking out</span>
+                            </div>
+                            <select id="settingsMaintenanceMode" class="form-control" style="width:100px;">
+                                <option value="OFF">OFF</option>
+                                <option value="ON">ON</option>
+                            </select>
+                        </div>
+
+                        <!-- SMTP Server Credentials -->
+                        <h2 style="font-family:var(--font-display); font-size:15px; margin-top:28px; margin-bottom:20px; color:var(--gold); border-bottom:1px dashed var(--sky-line); padding-bottom:8px;"><i class="fa-solid fa-envelope"></i> SMTP Server Configuration</h2>
+                        
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">SMTP Server Host</label>
+                            <input type="text" id="settingsSmtpServer" class="form-control" placeholder="e.g. smtp.mailtrap.io">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">SMTP Port</label>
+                            <input type="number" id="settingsSmtpPort" class="form-control" placeholder="e.g. 587">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">SMTP Username</label>
+                            <input type="text" id="settingsSmtpUsername" class="form-control" placeholder="Username / Access Key">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">SMTP Password</label>
+                            <input type="password" id="settingsSmtpPassword" class="form-control" placeholder="SMTP Password">
+                        </div>
+
+                        <!-- Payment gateway credentials -->
+                        <h2 style="font-family:var(--font-display); font-size:15px; margin-top:28px; margin-bottom:20px; color:var(--gold); border-bottom:1px dashed var(--sky-line); padding-bottom:8px;"><i class="fa-solid fa-credit-card"></i> Payment Gateway (Razorpay) Credentials</h2>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">Razorpay Key ID</label>
+                            <input type="text" id="settingsPaymentKeyId" class="form-control" placeholder="rzp_test_...">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:24px;">
+                            <label style="display:block; margin-bottom:4px; font-size:12.5px;">Razorpay Key Secret</label>
+                            <input type="password" id="settingsPaymentKeySecret" class="form-control" placeholder="Secret Key">
+                        </div>
+
+                        <div style="display:flex; gap:12px; justify-content:flex-end;">
+                            <button type="button" id="resetSettingsBtn" class="btn btn-outline danger" style="padding:10px 16px; font-size:12.5px; border-color:var(--ember); color:var(--ember);">Wipe Store Data</button>
+                            <button type="submit" id="saveSettingsBtn" class="btn btn-primary" style="padding:10px 16px; font-size:12.5px;">Save Configurations</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/components/toast.js"></script>
+    <script src="../js/components/modal.js"></script>
+    <script src="../js/components/loader.js"></script>
+    <script src="../js/components/pagination.js"></script>
+    <script src="../js/helpers/format.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/pages/settings.js"></script>
+</body>
+</html>

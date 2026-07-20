@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CloudCrackers | Premium Fireworks Store</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <link rel="icon" href="icons/favicon.ico">
+
+</head>
+
+<body>
+
+    <!-- Announcement Bar -->
+    <header class="announcement-bar">
+        <div class="container">
+            <div class="announcement-left">
+                <i class="fa-solid fa-fire"></i>
+                <span>Diwali Mega Sale • Flat 30% OFF on Selected Fireworks</span>
+            </div>
+            <div class="announcement-right">
+                <div class="announcement-item"><i class="fa-solid fa-truck-fast"></i><span>Free Delivery Above ₹999</span></div>
+                <div class="announcement-item"><i class="fa-solid fa-shield-halved"></i><span>100% Safety Certified</span></div>
+                <div class="announcement-item"><i class="fa-solid fa-phone"></i><span>Support : +91 98765 43210</span></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html"><span class="logo-text">Cloud<em>Crackers</em></span></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="pages/products.html">Products</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#offers">Offers</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="pages/spin-win.html" style="color:var(--gold);font-weight:700;" title="Spin & Win — Daily Lucky Draw">🎆 Spin &amp; Win</a></li>
+            </ul>
+            <div class="search-box">
+                <input type="text" placeholder="Search Fireworks...">
+                <button><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="nav-icons">
+                <a href="pages/profile.html"><i class="fa-regular fa-user"></i></a>
+                <a href="pages/wishlist.html"><i class="fa-regular fa-heart"></i></a>
+                <a href="pages/cart.html"><i class="fa-solid fa-cart-shopping"></i><span class="cart-count">0</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+        <div class="hero-sky">
+            <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
+            <span class="star s4"></span><span class="star s5"></span><span class="star s6"></span>
+            <span class="star s7"></span><span class="star s8"></span>
+
+            <svg class="burst burst-a" viewBox="0 0 200 200"><g class="burst-rays"><line x1="100" y1="100" x2="100" y2="10"/><line x1="100" y1="100" x2="164" y2="36"/><line x1="100" y1="100" x2="190" y2="100"/><line x1="100" y1="100" x2="164" y2="164"/><line x1="100" y1="100" x2="100" y2="190"/><line x1="100" y1="100" x2="36" y2="164"/><line x1="100" y1="100" x2="10" y2="100"/><line x1="100" y1="100" x2="36" y2="36"/></g></svg>
+
+            <svg class="burst burst-b" viewBox="0 0 200 200"><g class="burst-rays cyan"><line x1="100" y1="100" x2="100" y2="20"/><line x1="100" y1="100" x2="155" y2="45"/><line x1="100" y1="100" x2="180" y2="100"/><line x1="100" y1="100" x2="155" y2="155"/><line x1="100" y1="100" x2="100" y2="180"/><line x1="100" y1="100" x2="45" y2="155"/><line x1="100" y1="100" x2="20" y2="100"/><line x1="100" y1="100" x2="45" y2="45"/></g></svg>
+        </div>
+
+        <div class="container hero-content">
+            <span class="eyebrow">Diwali Collection 2026</span>
+            <h1>Light Up Your<br><span class="highlight">Sky Tonight</span></h1>
+            <p class="hero-sub">Certified-safe, factory-fresh fireworks — from silent sparklers for the little ones to sky-filling aerial shells for the big finale.</p>
+            <div class="hero-actions">
+                <a href="pages/products.html" class="btn btn-primary">Shop The Sale</a>
+                <a href="#categories" class="btn btn-outline">Browse Categories</a>
+            </div>
+            <div class="hero-stats">
+                <div><strong>12k+</strong><span>Happy Families</span></div>
+                <div><strong>250+</strong><span>Fireworks Varieties</span></div>
+                <div><strong>4.8★</strong><span>Average Rating</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SPIN & WIN PROMO BANNER ================= -->
+    <section style="
+        position: relative; z-index: 1;
+        background: linear-gradient(135deg, #1a0a2e 0%, #0B1F3A 50%, #1a0a2e 100%);
+        border-top: 1px solid rgba(255,215,0,0.15);
+        border-bottom: 1px solid rgba(255,215,0,0.15);
+        padding: 0;
+        overflow: hidden;
+    ">
+        <!-- Animated shimmer line -->
+        <div style="
+            position: absolute; top: 0; left: -100%; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, #FF7A00, transparent);
+            animation: spinBannerShimmer 3s linear infinite;
+        "></div>
+        <div style="
+            position: absolute; bottom: 0; left: -100%; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, #FF7A00, #FFD700, transparent);
+            animation: spinBannerShimmer 3s linear infinite 1.5s;
+        "></div>
+
+        <div class="container" style="
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 24px; gap: 20px; flex-wrap: wrap;
+        ">
+            <!-- Left: icon + text -->
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span style="
+                    font-size: 2.4rem; line-height: 1;
+                    animation: spinBannerSpin 4s linear infinite;
+                    display: inline-block;
+                ">🎡</span>
+                <div>
+                    <p style="
+                        font-family: var(--font-display);
+                        font-size: clamp(0.65rem, 2vw, 0.75rem);
+                        font-weight: 700;
+                        letter-spacing: 2px;
+                        text-transform: uppercase;
+                        color: #FF7A00;
+                        margin-bottom: 2px;
+                    ">🎆 Diwali Lucky Draw — Free Spin!</p>
+                    <p style="
+                        font-family: var(--font-display);
+                        font-size: clamp(1rem, 3vw, 1.4rem);
+                        font-weight: 800;
+                        color: #fff;
+                        margin: 0;
+                        line-height: 1.2;
+                    ">Spin &amp; Win up to <span style="
+                        background: linear-gradient(135deg, #FFD700, #FF7A00);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        background-clip: text;
+                    ">₹200 OFF</span> + Free Gifts!</p>
+                </div>
+            </div>
+
+            <!-- Right: CTA button -->
+            <a href="pages/spin-win.html" style="
+                display: inline-flex; align-items: center; gap: 10px;
+                background: linear-gradient(135deg, #FFD700 0%, #FF7A00 100%);
+                color: #0B1F3A;
+                font-family: var(--font-display);
+                font-size: 0.9rem;
+                font-weight: 800;
+                letter-spacing: 0.5px;
+                padding: 14px 28px;
+                border-radius: 50px;
+                text-decoration: none;
+                white-space: nowrap;
+                box-shadow: 0 6px 24px rgba(255,122,0,0.45);
+                transition: transform 0.2s, box-shadow 0.2s;
+                animation: spinBannerPulse 2s ease-in-out infinite;
+            "
+            onmouseover="this.style.transform='translateY(-3px) scale(1.03)'; this.style.boxShadow='0 12px 32px rgba(255,122,0,0.65)'; this.style.animation='none';"
+            onmouseout="this.style.transform=''; this.style.boxShadow='0 6px 24px rgba(255,122,0,0.45)'; this.style.animation='spinBannerPulse 2s ease-in-out infinite';"
+            >
+                <i class="fa-solid fa-rotate" style="font-size:1rem;"></i>
+                Spin Now — It's Free!
+                <i class="fa-solid fa-arrow-right" style="font-size:0.8rem;"></i>
+            </a>
+        </div>
+
+        <style>
+            @keyframes spinBannerShimmer { to { left: 100%; } }
+            @keyframes spinBannerSpin    { to { transform: rotate(360deg); } }
+            @keyframes spinBannerPulse   {
+                0%, 100% { box-shadow: 0 6px 24px rgba(255,122,0,0.45); }
+                50%       { box-shadow: 0 6px 32px rgba(255,122,0,0.75); }
+            }
+        </style>
+    </section>
+
+    <!-- ================= CATEGORIES ================= -->
+    <section class="section" id="categories">
+        <div class="container">
+            <div class="section-head">
+                <span class="eyebrow">Shop By Category</span>
+                <h2>Every Kind Of Spark</h2>
+            </div>
+            <div class="category-grid">
+                <a href="#" class="cat-card"><i class="fa-solid fa-sparkles"></i><span>Sparklers</span></a>
+                <a href="#" class="cat-card"><i class="fa-solid fa-rocket"></i><span>Rockets</span></a>
+                <a href="#" class="cat-card"><i class="fa-solid fa-explosion"></i><span>Aerial Shells</span></a>
+                <a href="#" class="cat-card"><i class="fa-solid fa-circle-notch"></i><span>Chakras</span></a>
+                <a href="#" class="cat-card"><i class="fa-solid fa-volume-high"></i><span>Sound Crackers</span></a>
+                <a href="#" class="cat-card"><i class="fa-solid fa-gift"></i><span>Gift Boxes</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= OFFER BANNER ================= -->
+    <section class="offer-banner" id="offers">
+        <div class="container offer-inner">
+            <div class="offer-text">
+                <span class="eyebrow eyebrow-light">Limited Time</span>
+                <h2>Diwali Mega Sale<br>Flat 30% OFF</h2>
+                <p>On selected sparklers, gift boxes &amp; aerial combos. Ends this Diwali week.</p>
+                <a href="pages/products.html" class="btn btn-primary">Grab The Deal</a>
+            </div>
+            <div class="offer-badge">
+                <span class="offer-percent">30%</span>
+                <span class="offer-label">OFF</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FEATURED PRODUCTS ================= -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <span class="eyebrow">Best Sellers</span>
+                <h2>Featured Fireworks</h2>
+            </div>
+            <div class="product-grid">
+
+                <div class="card product-card">
+                    <span class="badge">Bestseller</span>
+                    <div class="product-thumb"><i class="fa-solid fa-sparkles"></i></div>
+                    <h3>Electric Sparklers (10")</h3>
+                    <p class="muted-text">Pack of 10 · Smoke-light</p>
+                    <div class="product-foot">
+                        <span class="price">₹149</span>
+                        <button class="btn btn-outline btn-sm">Add</button>
+                    </div>
+                </div>
+
+                <div class="card product-card">
+                    <span class="badge">New</span>
+                    <div class="product-thumb"><i class="fa-solid fa-rocket"></i></div>
+                    <h3>Sky Shot Rocket Combo</h3>
+                    <p class="muted-text">Pack of 5 · High altitude</p>
+                    <div class="product-foot">
+                        <span class="price">₹899</span>
+                        <button class="btn btn-outline btn-sm">Add</button>
+                    </div>
+                </div>
+
+                <div class="card product-card">
+                    <div class="product-thumb"><i class="fa-solid fa-circle-notch"></i></div>
+                    <h3>Ground Chakkar Pack</h3>
+                    <p class="muted-text">Pack of 6 · Multi-color</p>
+                    <div class="product-foot">
+                        <span class="price">₹329</span>
+                        <button class="btn btn-outline btn-sm">Add</button>
+                    </div>
+                </div>
+
+                <div class="card product-card">
+                    <span class="badge">Gift Ready</span>
+                    <div class="product-thumb"><i class="fa-solid fa-gift"></i></div>
+                    <h3>Family Celebration Box</h3>
+                    <p class="muted-text">45 items · Assorted</p>
+                    <div class="product-foot">
+                        <span class="price">₹2,499</span>
+                        <button class="btn btn-outline btn-sm">Add</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= ABOUT ================= -->
+    <section class="section about" id="about">
+        <div class="container about-inner">
+            <div class="about-text">
+                <span class="eyebrow">Since 1998</span>
+                <h2>Three Generations Of Craft</h2>
+                <p>CloudCrackers began as a small Sivakasi workshop and grew into a name families trust every Diwali. Every product is tested against national safety standards before it reaches your doorstep.</p>
+                <ul class="about-points">
+                    <li><i class="fa-solid fa-check"></i> Licensed &amp; PESO-certified manufacturing</li>
+                    <li><i class="fa-solid fa-check"></i> Low-smoke, child-safe ranges available</li>
+                    <li><i class="fa-solid fa-check"></i> Pan-India doorstep delivery</li>
+                </ul>
+            </div>
+            <div class="about-visual">
+                <div class="about-orb"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer" id="contact">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <span class="logo-text">Cloud<em>Crackers</em></span>
+                <p>Certified-safe fireworks, delivered pan-India. Celebrate bright, celebrate safe.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Shop</h4>
+                <a href="#">Sparklers</a>
+                <a href="#">Rockets</a>
+                <a href="#">Gift Boxes</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="#">Track Order</a>
+                <a href="#">Safety Guide</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><i class="fa-solid fa-phone"></i> +91 98765 43210</p>
+                <p><i class="fa-solid fa-envelope"></i> hello@cloudcrackers.in</p>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <span>© 2026 CloudCrackers. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- Script tags for live catalog integration -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const container = document.querySelector(".product-grid");
+            if (!container) return;
+
+            try {
+                const products = await api.get("/api/products/");
+                if (!products || products.length === 0) return;
+
+                // Take the first 4 products to feature on the homepage
+                const featured = products.slice(0, 4);
+                container.innerHTML = "";
+
+                featured.forEach(p => {
+                    const card = document.createElement("div");
+                    card.className = "card product-card";
+                    card.style.cursor = "pointer";
+
+                    // Resolve image relative path from index.html
+                    let imgPath = p.product_image || "images/folowerpot.jpg";
+                    if (imgPath.startsWith("../")) {
+                        imgPath = imgPath.substring(3);
+                    }
+
+                    // Stock badge
+                    const badgeHtml = p.stock_quantity === 0
+                        ? `<span class="badge" style="background:var(--muted);">Out of Stock</span>`
+                        : p.stock_quantity <= 5
+                            ? `<span class="badge">Low Stock</span>`
+                            : "";
+
+                    // Discount price calculations
+                    const discountVal = parseFloat(p.discount || 0);
+                    const originalPrice = parseFloat(p.price);
+                    const finalPrice = Math.max(0, originalPrice - discountVal);
+                    const priceHtml = discountVal > 0
+                        ? `<span class="price">₹${finalPrice.toLocaleString('en-IN')} <span style="font-size:11px; text-decoration:line-through; color:var(--muted); margin-left:4px;">₹${originalPrice.toLocaleString('en-IN')}</span></span>`
+                        : `<span class="price">₹${originalPrice.toLocaleString('en-IN')}</span>`;
+
+                    card.innerHTML = `
+                        ${badgeHtml}
+                        <div class="product-thumb" style="height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-sm); margin-bottom: 12px;">
+                            <img src="${imgPath}" alt="${p.product_name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <h3>${p.product_name}</h3>
+                        <p class="muted-text">${p.description ? p.description.substring(0, 50) + "..." : "Premium quality firework"}</p>
+                        <div class="product-foot">
+                            ${priceHtml}
+                            <button class="btn btn-outline btn-sm" onclick="window.location.href='pages/product-details.html?id=${p.id}'" style="cursor: pointer;">View</button>
+                        </div>
+                    `;
+                    
+                    card.addEventListener("click", (e) => {
+                        if (!e.target.closest("button")) {
+                            window.location.href = `pages/product-details.html?id=${p.id}`;
+                        }
+                    });
+
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                console.error("Failed to load featured products:", err);
+            }
+        });
+    </script>
+</body>
+</html>

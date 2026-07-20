@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories | CloudCrackers Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--sky-800);
+            border: 1px solid var(--sky-line);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes modalFadeIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        #toastContainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        #imageDropZone.dragover {
+            border-color: var(--gold) !important;
+            background: rgba(242, 183, 5, 0.05) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-body">
+        <aside class="admin-sidebar">
+            <a href="admin-dashboard.html"><span class="logo-text">Cloud<em>Crackers</em></span></a>
+            <nav class="admin-nav">
+                <div class="nav-label">Main</div>
+                <a href="admin-dashboard.html" class=""><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="admin-orders.html" class=""><i class="fa-solid fa-box"></i> Orders</a>
+                <a href="admin-products.html" class=""><i class="fa-solid fa-fire"></i> Products</a>
+                <a href="admin-categories.html" class="active"><i class="fa-solid fa-tags"></i> Categories</a>
+                <a href="admin-users.html" class=""><i class="fa-solid fa-users"></i> Users</a>
+                <div class="nav-label">Settings</div>
+                <a href="admin-profile.html" class=""><i class="fa-solid fa-user-gear"></i> Profile</a>
+                <a href="admin-settings.html" class=""><i class="fa-solid fa-gears"></i> App Settings</a>
+                <div class="nav-label">Other</div>
+                <a href="../index.html"><i class="fa-solid fa-store"></i> View Store</a>
+            </nav>
+            <div class="admin-sidebar-foot">
+                <div class="profile-nav"><a href="#" id="logoutLink"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h1>Manage Categories</h1>
+                <div class="admin-topbar-right">
+                    <i class="fa-regular fa-bell" style="color:var(--muted); cursor:pointer;"></i>
+                    <div class="table-avatar" id="adminAvatarHeader">AK</div>
+                </div>
+            </div>
+            <div class="admin-content">
+                <div class="search-filter-bar">
+                    <input class="form-control" type="text" id="searchCategories" placeholder="Search categories by name...">
+                    <select class="form-control" id="filterStatus" style="width:160px;">
+                        <option value="">All Status</option>
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                    </select>
+                    <button class="btn btn-primary" id="addCategoryBtn" style="margin-left:auto;"><i class="fa-solid fa-plus"></i> Add Category</button>
+                </div>
+
+                <!-- Bulk Actions Panel -->
+                <div id="bulkActionsPanel" class="card" style="display:none; padding:12px 18px; margin-bottom:16px; background:var(--sky-900); border:1px solid var(--gold); align-items:center; gap:16px; flex-wrap:wrap;">
+                    <span style="font-size:13px; font-weight:500; color:var(--gold);"><i class="fa-solid fa-square-check"></i> <span id="selectedCount">0</span> Selected</span>
+                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-left:auto;">
+                        <button class="btn btn-outline btn-sm danger" id="bulkDeleteBtn"><i class="fa-regular fa-trash-can"></i> Delete</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;"><input type="checkbox" id="selectAllCategories" style="cursor:pointer;"></th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Products Count</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoriesTableBody">
+                            <tr><td colspan="6" style="text-align:center; padding:32px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:24px; color:var(--gold);"></i><div style="margin-top:8px; color:var(--muted);">Loading categories...</div></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination" id="categoriesPagination" style="padding:16px;"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Category Modal (Create/Edit) -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <button id="closeCategoryModal" style="position:absolute; top:16px; right:16px; color:var(--muted); font-size:20px; background:none; border:none; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="modalTitle" style="font-family:var(--font-display); font-size:16px; margin-bottom:16px;">Add Category</h2>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Category Name</label>
+                    <input type="text" id="categoryName" class="form-control" placeholder="e.g. Sparklers" required>
+                </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Description</label>
+                    <textarea id="categoryDescription" class="form-control" rows="3" placeholder="Category description..."></textarea>
+                </div>
+                
+                <!-- Category Image Preview Drop Area -->
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Category Image</label>
+                    <div id="imageDropZone" style="border:1.5px dashed var(--sky-line); padding:16px; border-radius:4px; text-align:center; cursor:pointer; background:rgba(0,0,0,0.15); margin-bottom:8px;">
+                        <i class="fa-regular fa-image" style="font-size:22px; color:var(--muted); margin-bottom:4px;"></i>
+                        <p style="font-size:11px; color:var(--muted); margin:0;">Drag image here or click to select</p>
+                        <input type="file" id="categoryImageFile" accept="image/*" style="display:none;">
+                    </div>
+                    <div id="imagePreviewsContainer" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+                        <!-- previews -->
+                    </div>
+                    <input type="text" id="categoryImage" class="form-control" placeholder="Or enter Image URL manually...">
+                </div>
+
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Status</label>
+                    <select id="categoryStatus" class="form-control">
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                    </select>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:12px;">
+                    <button type="button" id="cancelCategoryBtn" class="btn btn-outline" style="padding: 8px 16px; font-size:12.5px;">Cancel</button>
+                    <button type="submit" id="saveCategoryBtn" class="btn btn-primary" style="padding: 8px 16px; font-size:12.5px;">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/components/toast.js"></script>
+    <script src="../js/components/modal.js"></script>
+    <script src="../js/components/loader.js"></script>
+    <script src="../js/components/pagination.js"></script>
+    <script src="../js/helpers/format.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/pages/categories.js"></script>
+</body>
+</html>

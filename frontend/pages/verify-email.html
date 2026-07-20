@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification | CloudCrackers</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+    <style>
+        .verification-card {
+            text-align: center;
+            padding: 40px 30px;
+        }
+        .success-icon, .error-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+        .success-icon {
+            color: var(--gold);
+        }
+        .error-icon {
+            color: var(--red);
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: var(--gold);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="auth-page">
+    <div class="auth-visual">
+        <div>
+            <span class="eyebrow">Verification Status</span>
+            <h2>
+                Confirm Your
+                <span class="highlight">Registration</span>
+            </h2>
+        </div>
+    </div>
+    <div class="auth-form-side">
+        <div class="auth-card verification-card" id="verifyEmailContainer">
+            
+            <!-- Skeleton Loader -->
+            <div class="skeleton-wrapper" id="authSkeleton">
+                <div class="skeleton sk-title" style="margin: 0 auto 12px; width: 45%;"></div>
+                <div class="skeleton sk-text" style="margin: 0 auto 24px; width: 75%;"></div>
+                <div class="skeleton sk-input" style="border-radius: 50%; width: 60px; height: 60px; margin: 0 auto 24px;"></div>
+                <div class="skeleton sk-button"></div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="auth-card-content" id="authContent">
+                <a href="../index.html" class="auth-brand" style="justify-content: center;" aria-label="Go to CloudCrackers Home">
+                    <span class="logo-text">
+                        Cloud<em>Crackers</em>
+                    </span>
+                </a>
+                
+                <div id="verifyIcon" class="spinner"></div>
+                
+                <h1 id="verifyTitle">Verifying your email...</h1>
+                <p class="muted-text" id="verifyText">
+                    Please wait a moment while we verify your activation link.
+                </p>
+                
+                <a href="login.html" id="verifyActionBtn" class="btn btn-primary" style="display:none; width: 100%; margin-top: 20px;">Proceed to Login</a>
+                
+                <p class="auth-switch">
+                    Need support?
+                    <a href="../index.html#contact">Contact Us</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | CloudCrackers</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+</head>
+
+<body>
+
+    <div class="auth-page">
+
+        <div class="auth-visual">
+            <div>
+                <span class="eyebrow">Welcome Back</span>
+                <h2>
+                    Every Diwali Deserves A
+                    <span class="highlight">Brighter Sky</span>
+                </h2>
+            </div>
+        </div>
+
+        <div class="auth-form-side">
+
+            <div class="auth-card">
+
+                <!-- Skeleton Loader -->
+                <div class="skeleton-wrapper" id="authSkeleton">
+                    <div class="skeleton sk-title"></div>
+                    <div class="skeleton sk-text"></div>
+                    <div class="skeleton sk-label"></div>
+                    <div class="skeleton sk-input"></div>
+                    <div class="skeleton sk-label"></div>
+                    <div class="skeleton sk-input"></div>
+                    <div class="skeleton sk-button"></div>
+                </div>
+
+                <!-- Faded-in Form Content -->
+                <div class="auth-card-content" id="authContent">
+
+                    <a href="../index.html" class="auth-brand" aria-label="Go to CloudCrackers Home">
+                        <span class="logo-text">
+                            Cloud<em>Crackers</em>
+                        </span>
+                    </a>
+
+                    <h1>Log In</h1>
+                    <p class="muted-text">
+                        Welcome back! Please enter your credentials.
+                    </p>
+
+                    <form id="loginForm" novalidate>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <div class="input-group">
+                                <i class="fa-regular fa-envelope input-icon" aria-hidden="true"></i>
+                                <input type="email" id="email" class="form-control" placeholder="you@example.com"
+                                    autocomplete="email" required aria-required="true">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <label for="password">Password</label>
+                                <a href="forgot-password.html" class="link-secondary"
+                                    style="font-size: 0.85rem; color: var(--gold); text-decoration: none;">Forgot
+                                    Password?</a>
+                            </div>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+                                <input type="password" id="password" class="form-control" placeholder="********"
+                                    autocomplete="current-password" required aria-required="true">
+                                <button type="button" class="input-toggle" data-toggle-password="password"
+                                    aria-label="Toggle password visibility">
+                                    <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block" style="width: 100%; margin-top: 10px;">
+                            Login
+                        </button>
+
+                    </form>
+
+                    <p class="auth-switch">
+                        Don't have an account?
+                        <a href="./register.html">Register</a>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- External Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+
+</body>
+
+</html>

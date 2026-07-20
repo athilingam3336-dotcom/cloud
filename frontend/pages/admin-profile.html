@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile | CloudCrackers Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--sky-800);
+            border: 1px solid var(--sky-line);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        #toastContainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        #profileImageDropZone.dragover {
+            border-color: var(--gold) !important;
+            background: rgba(242, 183, 5, 0.05) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-body">
+        <aside class="admin-sidebar">
+            <a href="admin-dashboard.html"><span class="logo-text">Cloud<em>Crackers</em></span></a>
+            <nav class="admin-nav">
+                <div class="nav-label">Main</div>
+                <a href="admin-dashboard.html" class=""><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="admin-orders.html" class=""><i class="fa-solid fa-box"></i> Orders</a>
+                <a href="admin-products.html" class=""><i class="fa-solid fa-fire"></i> Products</a>
+                <a href="admin-categories.html" class=""><i class="fa-solid fa-tags"></i> Categories</a>
+                <a href="admin-users.html" class=""><i class="fa-solid fa-users"></i> Users</a>
+                <div class="nav-label">Settings</div>
+                <a href="admin-profile.html" class="active"><i class="fa-solid fa-user-gear"></i> Profile</a>
+                <a href="admin-settings.html" class=""><i class="fa-solid fa-gears"></i> App Settings</a>
+                <div class="nav-label">Other</div>
+                <a href="../index.html"><i class="fa-solid fa-store"></i> View Store</a>
+            </nav>
+            <div class="admin-sidebar-foot">
+                <div class="profile-nav"><a href="#" id="logoutLink"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h1>Admin Profile Settings</h1>
+                <div class="admin-topbar-right">
+                    <i class="fa-regular fa-bell" style="color:var(--muted); cursor:pointer;"></i>
+                    <div class="table-avatar" id="adminAvatarHeader">AD</div>
+                </div>
+            </div>
+            <div class="admin-content">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
+                    
+                    <!-- Form 1: General Info -->
+                    <div class="card" style="padding:24px;">
+                        <h2 style="font-family:var(--font-display); font-size:15px; margin-bottom:20px; color:var(--gold);"><i class="fa-regular fa-user"></i> General Information</h2>
+                        
+                        <!-- Avatar upload preview area -->
+                        <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:20px; gap:12px;">
+                            <div id="profileAvatarCircle" style="width:80px; height:80px; border-radius:50%; background:var(--sky-900); border:2px solid var(--sky-line); display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:700; color:var(--gold); overflow:hidden;">
+                                <!-- initials or img -->
+                            </div>
+                            <div id="profileImageDropZone" style="border:1.5px dashed var(--sky-line); border-radius:4px; padding:10px; text-align:center; cursor:pointer; width:200px; font-size:11px; color:var(--muted);">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Drop picture or Click to change
+                                <input type="file" id="profileImageFile" accept="image/*" style="display:none;">
+                            </div>
+                        </div>
+
+                        <form id="generalInfoForm">
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label style="display:block; margin-bottom:4px; font-size:12px;">First Name</label>
+                                <input type="text" id="profileFirstName" class="form-control" required placeholder="First Name">
+                            </div>
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label style="display:block; margin-bottom:4px; font-size:12px;">Last Name</label>
+                                <input type="text" id="profileLastName" class="form-control" required placeholder="Last Name">
+                            </div>
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label style="display:block; margin-bottom:4px; font-size:12px;">Email Address</label>
+                                <input type="email" id="profileEmail" class="form-control" disabled style="opacity:0.6;">
+                            </div>
+                            <div class="form-group" style="margin-bottom:20px;">
+                                <label style="display:block; margin-bottom:4px; font-size:12px;">Phone Number</label>
+                                <input type="text" id="profilePhone" class="form-control" placeholder="e.g. 9876543210">
+                            </div>
+                            <button type="submit" id="saveGeneralBtn" class="btn btn-primary btn-block" style="padding:10px 16px; font-size:12.5px;">Update Profile Info</button>
+                        </form>
+                    </div>
+
+                    <!-- Form 2: Password Reset -->
+                    <div class="card" style="padding:24px;">
+                        <h2 style="font-family:var(--font-display); font-size:15px; margin-bottom:20px; color:var(--gold);"><i class="fa-solid fa-lock"></i> Change Password</h2>
+                        <form id="changePasswordForm">
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label style="display:block; margin-bottom:4px; font-size:12px;">Current Password</label>
+                                <input type="password" id="currentPassword" class="form-control" required placeholder="Enter current password">
+                            </div>
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label style="display:block; margin-bottom:4px; font-size:12px;">New Password</label>
+                                <input type="password" id="newPassword" class="form-control" required minlength="6" placeholder="At least 6 characters">
+                            </div>
+                            <div class="form-group" style="margin-bottom:20px;">
+                                <label style="display:block; margin-bottom:4px; font-size:12px;">Confirm New Password</label>
+                                <input type="password" id="confirmNewPassword" class="form-control" required minlength="6" placeholder="Confirm your new password">
+                            </div>
+                            <button type="submit" id="savePasswordBtn" class="btn btn-primary btn-block" style="padding:10px 16px; font-size:12.5px;">Update Password</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/components/toast.js"></script>
+    <script src="../js/components/modal.js"></script>
+    <script src="../js/components/loader.js"></script>
+    <script src="../js/components/pagination.js"></script>
+    <script src="../js/helpers/format.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/pages/profile.js"></script>
+</body>
+</html>

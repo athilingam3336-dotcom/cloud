@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin & Win — CloudCrackers | Premium Diwali Fireworks Store</title>
+    <meta name="description" content="Spin the wheel and win exclusive Diwali discounts on CloudCrackers! Get up to ₹200 OFF, free shipping, and surprise gifts. One spin per account.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/spin-win.css">
+
+    <link rel="icon" href="../icons/favicon.ico">
+</head>
+
+<body class="spin-page">
+
+    <!-- ====================================================================
+         BACKGROUND LAYERS
+         ==================================================================== -->
+
+    <!-- Twinkling stars -->
+    <div class="stars-layer" id="starsLayer" aria-hidden="true"></div>
+
+    <!-- Confetti canvas (shown on win) -->
+    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+    <!-- Fireworks canvas (shown on big win) -->
+    <canvas id="fireworksCanvas" aria-hidden="true"></canvas>
+
+    <!-- ====================================================================
+         HEADER
+         ==================================================================== -->
+
+    <header class="spin-header" role="banner">
+        <div class="header-inner">
+            <a href="../index.html" class="logo-text" aria-label="CloudCrackers Home">
+                Cloud<em>Crackers</em>
+            </a>
+
+            <nav class="spin-header-nav" aria-label="Main navigation">
+                <a href="../pages/products.html">
+                    <i class="fa-solid fa-store" style="margin-right:6px; font-size:0.8rem;"></i>Shop
+                </a>
+                <a href="../pages/cart.html">
+                    <i class="fa-solid fa-cart-shopping" style="margin-right:6px; font-size:0.8rem;"></i>Cart
+                </a>
+                <a href="../pages/profile.html">
+                    <i class="fa-regular fa-user" style="margin-right:6px; font-size:0.8rem;"></i>Account
+                </a>
+                <a href="../pages/products.html" class="btn-primary-sm">
+                    <i class="fa-solid fa-fire" style="margin-right:5px;"></i>Shop Now
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ====================================================================
+         HERO BANNER
+         ==================================================================== -->
+
+    <section class="spin-hero" aria-labelledby="spinHeroTitle">
+        <p class="eyebrow">
+            <span class="star-icon" aria-hidden="true">✦</span>
+            Diwali Exclusive Offer
+            <span class="star-icon" aria-hidden="true">✦</span>
+        </p>
+        <h1 id="spinHeroTitle">
+            Spin The Wheel,<br>
+            <span class="gold-text">Win Big Rewards!</span>
+        </h1>
+        <p>Try your luck with our Diwali Lucky Wheel! One spin per account. Exclusive discounts, free shipping &amp; surprise gifts await.</p>
+    </section>
+
+    <!-- ====================================================================
+         MAIN — WHEEL + SPIN BUTTON
+         ==================================================================== -->
+
+    <main class="spin-main" aria-label="Spin the wheel section">
+
+        <!-- WHEEL CONTAINER -->
+        <div class="wheel-container">
+            <div class="wheel-wrapper" role="img" aria-label="Spinning prize wheel with 8 reward segments">
+                <!-- Glow effects -->
+                <div class="wheel-glow"  aria-hidden="true"></div>
+                <div class="wheel-glow-2" aria-hidden="true"></div>
+
+                <!-- Pointer arrow at top -->
+                <div class="wheel-pointer" aria-hidden="true">
+                    <svg viewBox="0 0 40 50" width="36" height="44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 48 L2 12 Q20 0 38 12 Z" fill="#FF7A00"/>
+                        <path d="M20 48 L2 12 Q20 0 38 12 Z" fill="url(#ptrGrad)" opacity="0.7"/>
+                        <path d="M20 42 L6 16 Q20 6 34 16 Z" fill="#FFD700" opacity="0.4"/>
+                        <circle cx="20" cy="10" r="5" fill="#FFD700"/>
+                        <defs>
+                            <linearGradient id="ptrGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#FFD700"/>
+                                <stop offset="1" stop-color="#FF7A00"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+
+                <!-- Canvas wheel -->
+                <canvas id="spinWheel" width="380" height="380" aria-label="Prize wheel"></canvas>
+
+                <!-- Center hub -->
+                <div class="wheel-hub" aria-hidden="true">🎆</div>
+            </div>
+        </div>
+
+        <!-- SPIN BUTTON -->
+        <div class="spin-btn-wrap">
+            <button id="spinBtn" type="button" aria-label="Spin the wheel to win a prize">
+                <span class="btn-icon" aria-hidden="true">
+                    <i class="fa-solid fa-rotate"></i>
+                </span>
+                Spin Now!
+            </button>
+            <p class="spin-status-msg" id="spinStatusMsg" role="status" aria-live="polite">
+                🌟 One spin per account — make it count!
+            </p>
+        </div>
+
+        <!-- ALREADY SPUN NOTICE (hidden by default, shown via JS) -->
+        <div class="already-spun-notice" id="alreadySpunNotice" style="display:none;" role="alert">
+            <span class="asn-icon" aria-hidden="true">🎁</span>
+            <div>
+                <strong>You've already spun today!</strong>
+                <p>Your reward: <strong class="asn-reward" style="color:#FFD700;"></strong></p>
+                <p style="margin-top:4px;">
+                    Coupon: <code class="asn-coupon" style="color:#FFD700; font-weight:700;"></code>
+                    &nbsp;–&nbsp;
+                    <button id="viewCouponAgain"
+                            style="background:none;border:none;color:rgba(255,215,0,0.75);cursor:pointer;font-size:0.78rem;text-decoration:underline;padding:0;"
+                            aria-label="View your coupon again">View again</button>
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ====================================================================
+         REWARD LEGEND
+         ==================================================================== -->
+
+    <section class="rewards-section" aria-labelledby="rewardsTitle">
+        <div class="inner">
+            <div class="section-title fade-in-up">
+                <h2 id="rewardsTitle">What's On The Wheel?</h2>
+                <p>8 exciting reward segments — something for everyone!</p>
+            </div>
+
+            <div class="rewards-grid" role="list">
+
+                <div class="reward-card" role="listitem">
+                    <span class="rc-icon" aria-hidden="true">🎁</span>
+                    <span class="rc-label">₹50 OFF</span>
+                    <span class="rc-desc">Flat ₹50 discount on any order</span>
+                </div>
+
+                <div class="reward-card highlight" role="listitem">
+                    <span class="rc-icon" aria-hidden="true">💰</span>
+                    <span class="rc-label">₹100 OFF</span>
+                    <span class="rc-desc">Flat ₹100 discount on any order</span>
+                </div>
+
+                <div class="reward-card highlight" role="listitem">
+                    <span class="rc-icon" aria-hidden="true">🏆</span>
+                    <span class="rc-label">₹200 OFF</span>
+                    <span class="rc-desc">Jackpot! ₹200 off your next order</span>
+                </div>
+
+                <div class="reward-card" role="listitem">
+                    <span class="rc-icon" aria-hidden="true">🚚</span>
+                    <span class="rc-label">Free Shipping</span>
+                    <span class="rc-desc">Free delivery on any order value</span>
+                </div>
+
+                <div class="reward-card" role="listitem">
+                    <span class="rc-icon" aria-hidden="true">⚡</span>
+                    <span class="rc-label">5% OFF</span>
+                    <span class="rc-desc">5% off on your entire cart</span>
+                </div>
+
+                <div class="reward-card" role="listitem">
+                    <span class="rc-icon" aria-hidden="true">🎆</span>
+                    <span class="rc-label">10% OFF</span>
+                    <span class="rc-desc">10% off on your entire cart</span>
+                </div>
+
+                <div class="reward-card" role="listitem">
+                    <span class="rc-icon" aria-hidden="true">🍀</span>
+                    <span class="rc-label">Better Luck</span>
+                    <span class="rc-desc">No reward this time — come back tomorrow!</span>
+                </div>
+
+                <div class="reward-card highlight" role="listitem">
+                    <span class="rc-icon" aria-hidden="true">🎊</span>
+                    <span class="rc-label">Surprise Gift</span>
+                    <span class="rc-desc">Mystery reward — could be anything!</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================
+         PREVIOUS REWARDS (hidden until spin happens)
+         ==================================================================== -->
+
+    <section class="prev-rewards-section" id="prevRewardsSection" style="display:none;" aria-labelledby="prevRewardsTitle">
+        <div class="inner">
+            <div class="section-title">
+                <h2 id="prevRewardsTitle">Your Spin History</h2>
+                <p>Keep track of your won rewards below.</p>
+            </div>
+            <div class="prev-rewards-list" id="prevRewardsList" role="list" aria-label="Previous spin rewards"></div>
+        </div>
+    </section>
+
+    <!-- ====================================================================
+         TERMS & CONDITIONS
+         ==================================================================== -->
+
+    <section class="terms-section" aria-labelledby="termsTitle">
+        <div class="inner">
+            <div class="terms-card">
+                <h3 id="termsTitle">
+                    <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+                    Terms &amp; Conditions
+                </h3>
+                <ul class="terms-list">
+                    <li>Each user account is entitled to <strong>one spin only</strong>. Spin status is tracked per browser session.</li>
+                    <li>Coupon codes are valid for <strong>7 days</strong> from the date of the spin.</li>
+                    <li>Coupons cannot be combined with other offers or discount codes.</li>
+                    <li>Free Shipping coupon is applicable on all orders regardless of value.</li>
+                    <li>Discount coupons (₹50 / ₹100 / ₹200) are valid on orders above the coupon value.</li>
+                    <li>Surprise Gift reward — our team will contact you within 2–3 business days.</li>
+                    <li>"Better Luck Next Time" is a valid spin result and is not subject to a re-spin.</li>
+                    <li>CloudCrackers reserves the right to modify or discontinue this promotion at any time.</li>
+                    <li>In case of any dispute, the decision of CloudCrackers management shall be final.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================
+         FOOTER
+         ==================================================================== -->
+
+    <footer class="spin-footer" role="contentinfo">
+        <a href="../index.html" class="logo-text" aria-label="CloudCrackers Home">
+            Cloud<em>Crackers</em>
+        </a>
+        <nav class="spin-footer-links" aria-label="Footer links">
+            <a href="../index.html">Home</a>
+            <a href="../pages/products.html">Products</a>
+            <a href="../pages/cart.html">Cart</a>
+            <a href="../pages/profile.html">My Account</a>
+            <a href="../pages/orders.html">Orders</a>
+        </nav>
+        <p>&copy; 2026 CloudCrackers. All rights reserved. | Premium Diwali Fireworks Store.</p>
+    </footer>
+
+    <!-- ====================================================================
+         REWARD POPUP / MODAL
+         ==================================================================== -->
+
+    <div class="popup-overlay" id="popupOverlay" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-describedby="popupDesc">
+        <div class="popup-card">
+
+            <!-- Close button -->
+            <button class="popup-close" id="popupCloseBtn" aria-label="Close reward popup">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+
+            <!-- Emoji -->
+            <span class="popup-emoji" id="popupEmoji" aria-hidden="true">🎆</span>
+
+            <!-- Header text -->
+            <p class="popup-eyebrow" id="popupEyebrow">🎉 Congratulations!</p>
+            <h2 class="popup-title" id="popupTitle">You Won!</h2>
+            <div class="popup-reward-badge" id="popupReward" aria-live="polite">₹100 OFF</div>
+            <p class="popup-desc" id="popupDesc">
+                Use coupon code below to get your reward on your next order. Valid for 7 days.
+            </p>
+
+            <!-- Coupon box -->
+            <div class="coupon-box" id="couponBox" aria-label="Your coupon code">
+                <div class="coupon-left">
+                    <span class="coupon-label">Your Coupon Code</span>
+                    <span class="coupon-code" id="couponCode">CC100-XXXXX</span>
+                </div>
+                <button class="coupon-copy-btn" id="copyBtn" aria-label="Copy coupon code">
+                    <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
+                </button>
+            </div>
+
+            <!-- Actions -->
+            <div class="popup-actions">
+                <button class="btn-popup-primary" id="continueShopping" type="button">
+                    <i class="fa-solid fa-cart-shopping" style="margin-right:8px;" aria-hidden="true"></i>
+                    Continue Shopping
+                </button>
+                <button class="btn-popup-secondary" id="popupCloseBtnAlt" type="button" aria-label="Close popup">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ====================================================================
+         SCRIPTS
+         ==================================================================== -->
+
+    <script>
+        // Wire up the alternate close button
+        document.getElementById('popupCloseBtnAlt').addEventListener('click', () => {
+            document.getElementById('popupOverlay').classList.remove('active');
+        });
+    </script>
+    <script src="../js/spin-win.js"></script>
+
+</body>
+
+</html>

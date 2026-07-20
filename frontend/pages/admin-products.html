@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | CloudCrackers Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="icon" href="../icons/favicon.ico">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--sky-800);
+            border: 1px solid var(--sky-line);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes modalFadeIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        #toastContainer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        #csvDropZone.dragover, #imageDropZone.dragover {
+            border-color: var(--gold) !important;
+            background: rgba(242, 183, 5, 0.05) !important;
+        }
+        .image-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: var(--radius-sm, 6px);
+            border: 1px solid var(--sky-line);
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+        .gallery-item:hover {
+            border-color: var(--gold);
+            transform: scale(1.03);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .gallery-item-actions {
+            position: absolute;
+            inset: 0;
+            background: rgba(11, 17, 32, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 2;
+        }
+        .gallery-item:hover .gallery-item-actions {
+            opacity: 1;
+        }
+        .gallery-action-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--sky-800);
+            border: 1px solid var(--sky-line);
+            color: var(--paper);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .gallery-action-btn:hover {
+            background: var(--gold);
+            color: var(--sky-900);
+            border-color: var(--gold);
+        }
+        .gallery-action-btn.delete:hover {
+            background: var(--ember);
+            border-color: var(--ember);
+            color: var(--paper);
+        }
+        .gallery-item-primary-badge {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: var(--gold);
+            color: var(--sky-900);
+            font-size: 8px;
+            font-weight: 700;
+            padding: 1px 4px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            z-index: 1;
+        }
+        .gallery-item-spinner {
+            position: absolute;
+            inset: 0;
+            background: rgba(11, 17, 32, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-body">
+        <aside class="admin-sidebar">
+            <a href="admin-dashboard.html"><span class="logo-text">Cloud<em>Crackers</em></span></a>
+            <nav class="admin-nav">
+                <div class="nav-label">Main</div>
+                <a href="admin-dashboard.html" class=""><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="admin-orders.html" class=""><i class="fa-solid fa-box"></i> Orders</a>
+                <a href="admin-products.html" class="active"><i class="fa-solid fa-fire"></i> Products</a>
+                <a href="admin-categories.html" class=""><i class="fa-solid fa-tags"></i> Categories</a>
+                <a href="admin-users.html" class=""><i class="fa-solid fa-users"></i> Users</a>
+                <div class="nav-label">Settings</div>
+                <a href="admin-profile.html" class=""><i class="fa-solid fa-user-gear"></i> Profile</a>
+                <a href="admin-settings.html" class=""><i class="fa-solid fa-gears"></i> App Settings</a>
+                <div class="nav-label">Other</div>
+                <a href="../index.html"><i class="fa-solid fa-store"></i> View Store</a>
+            </nav>
+            <div class="admin-sidebar-foot">
+                <div class="profile-nav"><a href="#" id="logoutLink"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></div>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h1>Manage Products</h1>
+                <div class="admin-topbar-right">
+                    <i class="fa-regular fa-bell" style="color:var(--muted); cursor:pointer;"></i>
+                    <div class="table-avatar" id="adminAvatarHeader">AK</div>
+                </div>
+            </div>
+            <div class="admin-content">
+                <div class="search-filter-bar" style="flex-wrap:wrap; gap:12px;">
+                    <input class="form-control" type="text" id="searchProducts" placeholder="Search products..." style="width:200px;">
+                    <select class="form-control" id="filterCategory" style="width:160px;">
+                        <option value="">All Categories</option>
+                    </select>
+                    <select class="form-control" id="filterStatus" style="width:130px;">
+                        <option value="">All Status</option>
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                    </select>
+                    <div style="margin-left:auto; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <button class="btn btn-outline" id="importCsvBtn" style="padding:8px 14px; font-size:12.5px;"><i class="fa-solid fa-file-import"></i> CSV Import</button>
+                        <button class="btn btn-outline" id="exportCsvBtn" style="padding:8px 14px; font-size:12.5px;"><i class="fa-solid fa-file-csv"></i> CSV Export</button>
+                        <button class="btn btn-outline" id="exportExcelBtn" style="padding:8px 14px; font-size:12.5px;"><i class="fa-solid fa-file-excel"></i> Excel Export</button>
+                        <button class="btn btn-primary" id="addProductBtn" style="padding:8px 14px; font-size:12.5px;"><i class="fa-solid fa-plus"></i> Add Product</button>
+                    </div>
+                </div>
+
+                <!-- Bulk Actions Panel -->
+                <div id="bulkActionsPanel" class="card" style="display:none; padding:12px 18px; margin-bottom:16px; background:var(--sky-900); border:1px solid var(--gold); align-items:center; gap:16px; flex-wrap:wrap;">
+                    <span style="font-size:13px; font-weight:500; color:var(--gold);"><i class="fa-solid fa-square-check"></i> <span id="selectedCount">0</span> Selected</span>
+                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-left:auto;">
+                        <button class="btn btn-outline btn-sm danger" id="bulkDeleteBtn"><i class="fa-regular fa-trash-can"></i> Delete</button>
+                        <button class="btn btn-outline btn-sm" id="bulkActivateBtn">Activate</button>
+                        <button class="btn btn-outline btn-sm" id="bulkDeactivateBtn">Deactivate</button>
+                        <div style="display:flex; align-items:center; gap:4px;">
+                            <select id="bulkCategorySelect" class="form-control" style="width:130px; height:30px; font-size:11.5px; padding:2px 6px;">
+                                <option value="">Move Category...</option>
+                            </select>
+                            <button class="btn btn-outline btn-sm" id="bulkCategoryBtn">Move</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:4px;">
+                            <input type="number" id="bulkPriceInput" class="form-control" placeholder="New Price..." style="width:100px; height:30px; font-size:11.5px; padding:2px 6px;">
+                            <button class="btn btn-outline btn-sm" id="bulkPriceBtn">Update Price</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;"><input type="checkbox" id="selectAllProducts" style="cursor:pointer;"></th>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Discount</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <tr><td colspan="9" style="text-align:center; padding:32px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:24px; color:var(--gold);"></i><div style="margin-top:8px; color:var(--muted);">Loading products...</div></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination" id="productsPagination" style="padding:16px;"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal (Create/Edit) -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <button id="closeProductModal" style="position:absolute; top:16px; right:16px; color:var(--muted); font-size:20px; background:none; border:none; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="modalTitle" style="font-family:var(--font-display); font-size:16px; margin-bottom:16px;">Add Product</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Product Name</label>
+                    <input type="text" id="productName" class="form-control" placeholder="e.g. Electric Sparklers" required>
+                </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Category</label>
+                    <select id="productCategory" class="form-control" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Price (₹)</label>
+                    <input type="number" id="productPrice" class="form-control" step="0.01" min="0.01" placeholder="e.g. 149.00" required>
+                </div>
+                <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <div class="form-group">
+                        <label style="display:block; margin-bottom:4px; font-size:12px;">Discount (₹)</label>
+                        <input type="number" id="productDiscount" class="form-control" step="0.01" min="0" placeholder="e.g. 20.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:block; margin-bottom:4px; font-size:12px;">Weight</label>
+                        <input type="text" id="productWeight" class="form-control" placeholder="e.g. 250g" required>
+                    </div>
+                </div>
+                <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <div class="form-group">
+                        <label style="display:block; margin-bottom:4px; font-size:12px;">SKU</label>
+                        <input type="text" id="productSku" class="form-control" placeholder="e.g. SKU-SPK-001" required>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:block; margin-bottom:4px; font-size:12px;">Brand</label>
+                        <input type="text" id="productBrand" class="form-control" placeholder="e.g. CloudCrackers" required>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Stock Quantity</label>
+                    <input type="number" id="productStock" class="form-control" min="0" placeholder="e.g. 100" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Description</label>
+                    <textarea id="productDescription" class="form-control" rows="2" placeholder="Product details..."></textarea>
+                </div>
+                
+                <!-- Expanded Multiple Image Upload Drag & Drop Area -->
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Product Images</label>
+                    <div id="imageDropZone" style="border:1.5px dashed var(--sky-line); padding:16px; border-radius:4px; text-align:center; cursor:pointer; background:rgba(0,0,0,0.15); margin-bottom:8px;">
+                        <i class="fa-regular fa-image" style="font-size:22px; color:var(--muted); margin-bottom:4px;"></i>
+                        <p style="font-size:11px; color:var(--muted); margin:0;">Drag image here or click to select</p>
+                        <input type="file" id="productImageFile" accept="image/*" style="display:none;" multiple>
+                        <input type="file" id="replaceImageFileInput" accept="image/*" style="display:none;">
+                    </div>
+                    <div id="imagePreviewsContainer" class="image-gallery-grid" style="margin-bottom:12px;">
+                        <!-- dynamic previews -->
+                    </div>
+                    <input type="text" id="productImage" class="form-control" placeholder="Or enter Image URL manually...">
+                </div>
+
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="display:block; margin-bottom:4px; font-size:12px;">Status</label>
+                    <select id="productStatus" class="form-control">
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                    </select>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:12px;">
+                    <button type="button" id="cancelProductBtn" class="btn btn-outline" style="padding: 8px 16px; font-size:12.5px;">Cancel</button>
+                    <button type="submit" id="saveProductBtn" class="btn btn-primary" style="padding: 8px 16px; font-size:12.5px;">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Drag & Drop CSV Import Modal -->
+    <div id="csvImportModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <button id="closeCsvModal" style="position:absolute; top:16px; right:16px; color:var(--muted); font-size:20px; background:none; border:none; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="font-family:var(--font-display); font-size:15px; margin-bottom:16px;">Import Products from CSV</h2>
+            <div id="csvDropZone" style="border:2px dashed var(--sky-line); border-radius:var(--radius-md); padding:32px; text-align:center; cursor:pointer; background:rgba(255,255,255,0.02); transition:all 0.3s; margin-bottom:16px;">
+                <i class="fa-solid fa-file-csv" style="font-size:36px; color:var(--gold); margin-bottom:12px;"></i>
+                <p style="font-size:13px; margin-bottom:6px; font-weight:500;">Drag & Drop your CSV file here or click to browse</p>
+                <span style="font-size:11px; color:var(--muted); display:block; line-height:1.4;">Header format: product_name, category_name, price, stock_quantity, description, status, product_image</span>
+                <input type="file" id="csvFileInput" accept=".csv" style="display:none;">
+            </div>
+            <div id="csvSelectedFileText" style="font-size:12px; color:var(--spark-cyan); text-align:center; font-weight:500; display:none; margin-bottom:16px;"></div>
+            <div style="display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" id="cancelCsvBtn" class="btn btn-outline" style="padding: 8px 16px; font-size:12.5px;">Cancel</button>
+                <button type="button" id="processCsvBtn" class="btn btn-primary" style="padding: 8px 16px; font-size:12.5px;" disabled>Process CSV</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer"></div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/components/toast.js"></script>
+    <script src="../js/components/modal.js"></script>
+    <script src="../js/components/loader.js"></script>
+    <script src="../js/components/pagination.js"></script>
+    <script src="../js/helpers/format.js"></script>
+    <script src="../js/admin.js"></script>
+    <script src="../js/pages/products.js"></script>
+</body>
+</html>
