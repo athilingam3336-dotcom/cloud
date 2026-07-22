@@ -1,0 +1,14 @@
+=========================================
+TIMESTAMP: 2026-07-22T10:10:42.508021
+TYPE: EMAIL_VERIFICATION
+RECIPIENT: test@example.com
+SUBJECT: Verify Your CloudCrackers Email
+BODY:
+Hello Test,
+
+Welcome to CloudCrackers! Please verify your email by clicking the following link:
+http://127.0.0.1:8000/pages/verify-email.html?token=372f2adb-1f75-471e-9a1d-5f06b404d988
+
+This link will expire in 24 hours.
+=========================================
+

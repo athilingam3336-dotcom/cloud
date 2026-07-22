@@ -23,6 +23,14 @@ const SPIN_EXTRA_LAPS  = 7;      // full rotations before landing
 const STORAGE_KEY      = 'cc_spin_result';
 const CANVAS_SIZE      = 380;    // px (desktop)
 
+const token = localStorage.getItem(TOKEN_KEY);
+if (!token) {
+    window.location.href = "../pages/login.html?redirect=" + encodeURIComponent(window.location.pathname);
+}
+
+let lastCoupon = null;
+let lastSegIdx = null;
+
 /* ==========================================================================
    STATE
    ========================================================================== */
@@ -228,11 +236,82 @@ function easeOut (t) {
    SPIN ANIMATION
    ========================================================================== */
 
-function spin () {
-    if (isSpinning) return;
+async function fetchSpinStatus() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/spin/status`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (response.status === 401) {
+            localStorage.removeItem(TOKEN_KEY);
+            window.location.href = "../pages/login.html";
+            return;
+        }
+        const data = await response.json();
+        if (data.can_spin) {
+            spinBtn.disabled = false;
+            statusMsg.innerHTML = `🌟 One spin per account — make it count!`;
+            statusMsg.className = 'spin-status-msg';
+            if (alreadySpunNotice) alreadySpunNotice.style.display = 'none';
+        } else {
+            spinBtn.disabled = true;
+            statusMsg.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#FFD700"></i> You have already used today's spin. Next spin in: ${data.next_spin_in || '24h'}`;
+            statusMsg.className = 'spin-status-msg used';
+            if (alreadySpunNotice) alreadySpunNotice.style.display = 'flex';
+        }
+    } catch (error) {
+        console.error("Error fetching spin status:", error);
+    }
+}
 
-    const stored = getStoredResult();
-    if (stored) return;
+async function fetchSpinHistory() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/spin/history`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (response.ok) {
+            const history = await response.json();
+            if (prevRewardsList) prevRewardsList.innerHTML = '';
+            
+            if (history && history.length > 0) {
+                if (prevSection) prevSection.style.display = 'block';
+                
+                const lastSpin = history[0];
+                const segIdx = SEGMENTS.findIndex(s => s.label === lastSpin.reward_title);
+                if (segIdx !== -1) {
+                    lastSegIdx = segIdx;
+                    lastCoupon = lastSpin.coupon_code;
+                }
+                
+                if (spinBtn.disabled && alreadySpunNotice && segIdx !== -1) {
+                    alreadySpunNotice.style.display = 'flex';
+                    const noticeReward = alreadySpunNotice.querySelector('.asn-reward');
+                    if (noticeReward) noticeReward.textContent = lastSpin.reward_title;
+                    const noticeCoupon = alreadySpunNotice.querySelector('.asn-coupon');
+                    if (noticeCoupon && lastSpin.coupon_code) noticeCoupon.textContent = lastSpin.coupon_code;
+                }
+
+                history.forEach(item => {
+                    const matchedIdx = SEGMENTS.findIndex(s => s.label === item.reward_title);
+                    const matchedSeg = matchedIdx !== -1 ? SEGMENTS[matchedIdx] : null;
+                    if (matchedSeg && item.coupon_code) {
+                        addToPrevRewards(matchedSeg, item.coupon_code, item.created_at);
+                    }
+                });
+            } else {
+                if (prevSection) prevSection.style.display = 'none';
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching spin history:", error);
+    }
+}
+
+async function spin () {
+    if (isSpinning) return;
 
     isSpinning = true;
     spinBtn.disabled = true;
@@ -240,50 +319,73 @@ function spin () {
     statusMsg.textContent = '🎡 Spinning…';
     statusMsg.className = 'spin-status-msg';
 
-    const segIdx    = pickSegment();
-    const arc       = (2 * Math.PI) / SEGMENTS.length;
+    try {
+        const response = await fetch(`${API_BASE_URL}/spin/play`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
-    /* Target angle: pointer is at top (angle = -π/2).
-       We want segIdx segment's midpoint to be at the top. */
-    const targetMid = segIdx * arc + arc / 2;
-    const totalSpin = SPIN_EXTRA_LAPS * 2 * Math.PI + (2 * Math.PI - targetMid - currentAngle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-
-    const startAngle = currentAngle;
-    const finalAngle = startAngle + totalSpin;
-    let startTime    = null;
-
-    function step (timestamp) {
-        if (!startTime) startTime = timestamp;
-        const elapsed  = timestamp - startTime;
-        const progress = Math.min(elapsed / SPIN_DURATION_MS, 1);
-        const eased    = easeOut(progress);
-
-        currentAngle = startAngle + eased * totalSpin;
-        drawWheel(currentAngle);
-
-        if (progress < 1) {
-            requestAnimationFrame(step);
-        } else {
-            currentAngle = finalAngle;
-            isSpinning = false;
-            canvas.classList.remove('spinning');
-            onSpinComplete(segIdx);
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.detail || "Failed to spin");
         }
-    }
 
-    requestAnimationFrame(step);
+        const playData = await response.json();
+        
+        const segIdx = playData.segment_index;
+        const targetAngleDegrees = playData.angle;
+        const targetAngleRadians = (targetAngleDegrees * Math.PI) / 180;
+
+        const startAngle = currentAngle;
+        const finalAngle = targetAngleRadians;
+        const totalSpin = finalAngle - startAngle;
+        let startTime    = null;
+
+        function step (timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed  = timestamp - startTime;
+            const progress = Math.min(elapsed / SPIN_DURATION_MS, 1);
+            const eased    = easeOut(progress);
+
+            currentAngle = startAngle + eased * totalSpin;
+            drawWheel(currentAngle);
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                currentAngle = finalAngle;
+                isSpinning = false;
+                canvas.classList.remove('spinning');
+                onSpinComplete(segIdx, playData.coupon_code);
+            }
+        }
+
+        requestAnimationFrame(step);
+
+    } catch (error) {
+        isSpinning = false;
+        canvas.classList.remove('spinning');
+        spinBtn.disabled = false;
+        statusMsg.textContent = `❌ Error: ${error.message}`;
+        statusMsg.className = 'spin-status-msg';
+        console.error("Spin error:", error);
+    }
 }
 
 /* ==========================================================================
    ON SPIN COMPLETE
    ========================================================================== */
 
-function onSpinComplete (segIdx) {
+function onSpinComplete (segIdx, couponCode) {
     const seg    = SEGMENTS[segIdx];
-    const coupon = seg.couponPrefix ? generateCoupon(seg.couponPrefix) : null;
-    const result = { seg: segIdx, coupon, ts: Date.now() };
+    const coupon = couponCode;
 
-    saveResult(result);
+    lastSegIdx = segIdx;
+    lastCoupon = coupon;
+
     showPopup(seg, coupon);
     updateAfterSpunUI(seg, coupon);
 
@@ -297,8 +399,8 @@ function onSpinComplete (segIdx) {
         launchConfetti();
     }
 
-    /* Store previous reward for display */
-    addToPrevRewards(seg, coupon);
+    fetchSpinStatus();
+    fetchSpinHistory();
 }
 
 /* ==========================================================================
@@ -385,24 +487,7 @@ function updateAfterSpunUI (seg, coupon) {
 }
 
 function initAlreadySpunState () {
-    const stored = getStoredResult();
-    if (!stored) return;
-
-    spinBtn.disabled = true;
-    statusMsg.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#FFD700"></i> You have already used today's spin.`;
-    statusMsg.className = 'spin-status-msg used';
-
-    const seg = SEGMENTS[stored.seg];
-    if (alreadySpunNotice) {
-        alreadySpunNotice.style.display = 'flex';
-        const noticeReward = alreadySpunNotice.querySelector('.asn-reward');
-        if (noticeReward && seg) noticeReward.textContent = seg.label;
-        const noticeCoupon = alreadySpunNotice.querySelector('.asn-coupon');
-        if (noticeCoupon && stored.coupon) noticeCoupon.textContent = stored.coupon;
-    }
-
-    /* Show previous rewards */
-    if (stored.coupon && seg) addToPrevRewards(seg, stored.coupon, stored.ts);
+    // Replaced by fetchSpinStatus & fetchSpinHistory
 }
 
 /* ==========================================================================
@@ -626,10 +711,9 @@ document.getElementById('continueShopping').addEventListener('click', () => {
 });
 
 document.getElementById('viewCouponAgain').addEventListener('click', () => {
-    const stored = getStoredResult();
-    if (!stored) return;
-    const seg = SEGMENTS[stored.seg];
-    showPopup(seg, stored.coupon);
+    if (lastSegIdx === null) return;
+    const seg = SEGMENTS[lastSegIdx];
+    showPopup(seg, lastCoupon);
 });
 
 /* ==========================================================================
@@ -650,5 +734,6 @@ window.addEventListener('resize', () => {
     initStars();
     initFloatingCrackers();
     setCanvasSize();
-    initAlreadySpunState();
+    fetchSpinStatus();
+    fetchSpinHistory();
 })();
