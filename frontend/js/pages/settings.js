@@ -8,7 +8,7 @@ settings.js
 let storeLogoBase64 = "";
 
 document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("cloudcrackers_access_token");
+    const token = localStorage.getItem(TOKEN_KEY);
     if (!token) return;
 
     // Form handlers

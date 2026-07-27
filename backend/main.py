@@ -66,15 +66,9 @@ app = FastAPI(
 )
 
 # =========================================
-# Security Middlewares Configuration
-# =========================================
-
-app.add_middleware(SecurityHeadersMiddleware)
-app.add_middleware(RequestSizeLimitMiddleware)
-app.add_middleware(CSRFMiddleware)
-
-# =========================================
 # CORS Configuration
+# (Added FIRST so it executes LAST in the
+#  middleware chain — after security middlewares)
 # =========================================
 
 origins = [o.strip() for o in settings.ALLOWED_CORS_ORIGINS.split(",") if o.strip()]
@@ -86,6 +80,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# =========================================
+# Security Middlewares Configuration
+# (Added AFTER CORS so they execute BEFORE
+#  CORS — they must skip OPTIONS preflight)
+# =========================================
+
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(RequestSizeLimitMiddleware)
+app.add_middleware(CSRFMiddleware)
 
 # =========================================
 # Global Exception Handler

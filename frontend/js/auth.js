@@ -217,11 +217,15 @@ function saveToken(token) {
     localStorage.setItem(TOKEN_KEY, token);
 }
 
+// TOKEN_KEY is already declared globally in config.js. We don't redeclare it here to avoid SyntaxError.
+if (typeof TOKEN_KEY === 'undefined') {
+    window.TOKEN_KEY = "cloudcrackers_token";
+}
+
 function saveTokens(accessToken, refreshToken) {
     localStorage.setItem(TOKEN_KEY, accessToken);
     localStorage.setItem("cloudcrackers_refresh_token", refreshToken);
 }
-
 function getToken() {
     return localStorage.getItem(TOKEN_KEY);
 }
@@ -256,9 +260,11 @@ function parseJwt(token) {
 
 // ---- Core Authentication Actions ----
 
+
 // 1. LOGIN SUBMIT HANDLER
 const loginForm = document.getElementById("loginForm");
 if (loginForm) {
+
     loginForm.addEventListener("submit", async function (e) {
         e.preventDefault();
         const email = document.getElementById("email").value;
@@ -272,18 +278,43 @@ if (loginForm) {
         setFormLoading(loginForm, true);
         try {
             const result = await api.post("/api/auth/login", { email, password });
-            saveTokens(result.access_token, result.refresh_token);
-            
-            showToast("Login successful! Redirecting...", "success");
-            
-            const payload = parseJwt(result.access_token);
-            setTimeout(() => {
-                if (payload && payload.role === "admin") {
+
+            // Admin users require MFA – the API returns {mfa_required: true, mfa_token: "..."}
+            if (result.mfa_required) {
+                // Show a simple prompt for the OTP (could be replaced by a modal UI)
+                const otp = prompt("Enter the one‑time password sent to your email:");
+                if (!otp) {
+                    showToast("MFA code required.", "error");
+                    setFormLoading(loginForm, false);
+                    return;
+                }
+                // Verify MFA and obtain real access/refresh tokens
+                const mfaResult = await api.post("/api/auth/mfa/verify", {
+                    mfa_token: result.mfa_token,
+                    code: otp
+                });
+                // Store the new tokens
+                saveTokens(mfaResult.access_token, mfaResult.refresh_token);
+                const mfaPayload = parseJwt(mfaResult.access_token);
+                // Redirect based on role (admin vs normal user)
+                if (mfaPayload && mfaPayload.role && mfaPayload.role.toUpperCase() === "ADMIN") {
                     window.location.href = "admin-dashboard.html";
                 } else {
                     window.location.href = "products.html";
                 }
-            }, 1000);
+            } else {
+                // Regular login – tokens are already in result
+                saveTokens(result.access_token, result.refresh_token);
+                showToast("Login successful! Redirecting...", "success");
+                const payload = parseJwt(result.access_token);
+                if (payload && payload.role && payload.role.toUpperCase() === "ADMIN") {
+                    window.location.href = "admin-dashboard.html";
+                } else {
+                    window.location.href = "products.html";
+                }
+            }
+
+
         } catch (err) {
             setFormLoading(loginForm, false);
             showToast(err.message || "Invalid email or password.", "error");

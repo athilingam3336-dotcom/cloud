@@ -15,6 +15,9 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     Enforces security headers such as CSP, HSTS, X-Frame-Options, XSS protection.
     """
     async def dispatch(self, request: Request, call_next) -> Response:
+        # Let CORS preflight requests pass through untouched
+        if request.method == "OPTIONS":
+            return await call_next(request)
         response: Response = await call_next(request)
         
         # CSP Header
@@ -57,6 +60,9 @@ class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
         self.max_size_bytes = max_size_bytes
 
     async def dispatch(self, request: Request, call_next) -> Response:
+        # Let CORS preflight requests pass through untouched
+        if request.method == "OPTIONS":
+            return await call_next(request)
         content_length = request.headers.get("content-length")
         if content_length:
             try:
@@ -79,6 +85,9 @@ class CSRFMiddleware(BaseHTTPMiddleware):
     Exempts safe methods (GET, HEAD, OPTIONS, TRACE) and public auth handshakes.
     """
     async def dispatch(self, request: Request, call_next) -> Response:
+        # Let CORS preflight requests pass through untouched
+        if request.method == "OPTIONS":
+            return await call_next(request)
         # Check if cookie exists, otherwise generate a new token
         csrf_cookie = request.cookies.get("csrf_token")
         new_csrf_token = csrf_cookie or secrets.token_hex(32)

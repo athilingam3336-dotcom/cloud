@@ -5,7 +5,7 @@ admin.js
 ==========================================
 */
 
-const TOKEN_KEY = "cloudcrackers_access_token";
+// TOKEN_KEY is defined in config.js; using consistent key
 const ADMIN_ROLES = ["admin", "Super Admin", "Admin", "Manager", "Staff"];
 
 // JWT decoding helper

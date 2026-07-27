@@ -6,6 +6,13 @@ Centralized API service with timeout, retry, and global error handling
 ==========================================
 */
 
+function getFullUrl(endpoint) {
+    if (endpoint.startsWith("/api/")) {
+        return API_BASE_URL + endpoint.substring(4);
+    }
+    return API_BASE_URL + endpoint;
+}
+
 const api = {
     TIMEOUT_MS: 10000,
     MAX_RETRIES: 2,
@@ -50,7 +57,7 @@ const api = {
         options.signal = controller.signal;
 
         try {
-            const response = await fetch(API_BASE_URL + endpoint, options);
+            const response = await fetch(getFullUrl(endpoint), options);
             clearTimeout(timeoutId);
 
             let result = {};
@@ -67,7 +74,7 @@ const api = {
                     const refreshToken = localStorage.getItem("cloudcrackers_refresh_token");
                     if (refreshToken) {
                         try {
-                            const refreshResponse = await fetch(API_BASE_URL + "/auth/refresh", {
+                            const refreshResponse = await fetch(getFullUrl("/auth/refresh"), {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json"
@@ -82,7 +89,7 @@ const api = {
 
                                 // Retry the original request with the new access token
                                 headers["Authorization"] = `Bearer ${refreshResult.access_token}`;
-                                const retryResponse = await fetch(API_BASE_URL + endpoint, {
+                                const retryResponse = await fetch(getFullUrl(endpoint), {
                                     ...options,
                                     headers: headers
                                 });
@@ -182,11 +189,16 @@ const api = {
         console.error("Global API Error Caught:", error);
 
         if (error.status === 401 || error.status === 403) {
-            console.warn("Session expired or Unauthorized. Redirecting to login...");
-            localStorage.removeItem(TOKEN_KEY);
-            localStorage.removeItem("cloudcrackers_refresh_token");
-            // Verify if we are already in login.html to avoid infinite loop
-            if (!window.location.pathname.endsWith("login.html")) {
+            // Only clear tokens and redirect if we're NOT already on the login page.
+            // This prevents wiping a freshly stored token when the LOGIN REQUEST itself
+            // returns 403 (e.g., unverified email, disabled account).
+            const onLoginPage = window.location.pathname.endsWith("login.html");
+
+            if (!onLoginPage) {
+                // We are on a protected page and got unauthorized — clear session and redirect.
+                console.warn("Session expired or Unauthorized. Redirecting to login...");
+                localStorage.removeItem(TOKEN_KEY);
+                localStorage.removeItem("cloudcrackers_refresh_token");
                 window.location.href = "login.html";
             }
             return;

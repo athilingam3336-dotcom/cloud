@@ -12,3 +12,121 @@ http://127.0.0.1:8000/pages/verify-email.html?token=372f2adb-1f75-471e-9a1d-5f06
 This link will expire in 24 hours.
 =========================================
 
+=========================================
+TIMESTAMP: 2026-07-22T15:40:48.993039
+TYPE: EMAIL_VERIFICATION
+RECIPIENT: vijay@gmail.com
+SUBJECT: Verify Your CloudCrackers Email
+BODY:
+Hello vijay,
+
+Welcome to CloudCrackers! Please verify your email by clicking the following link:
+http://127.0.0.1:8000/pages/verify-email.html?token=7d2aa674-0a9b-42d5-b743-b91cdd8a5c42
+
+This link will expire in 24 hours.
+=========================================
+
+=========================================
+TIMESTAMP: 2026-07-26T01:59:25.042962
+TYPE: EMAIL_VERIFICATION
+RECIPIENT: rohith@gmail.com
+SUBJECT: Verify Your CloudCrackers Email
+BODY:
+Hello rohith,
+
+Welcome to CloudCrackers! Please verify your email by clicking the following link:
+http://127.0.0.1:8000/pages/verify-email.html?token=bcd52b07-36ac-403d-834d-86a30370acbe
+
+This link will expire in 24 hours.
+=========================================
+
+=========================================
+TIMESTAMP: 2026-07-26T02:02:24.168744
+TYPE: EMAIL_VERIFICATION
+RECIPIENT: mukesh18@gmail.com
+SUBJECT: Verify Your CloudCrackers Email
+BODY:
+Hello mukesh,
+
+Welcome to CloudCrackers! Please verify your email by clicking the following link:
+http://127.0.0.1:8000/pages/verify-email.html?token=08ff47b9-64eb-4805-90bc-9b49db8a596d
+
+This link will expire in 24 hours.
+=========================================
+
+=========================================
+TIMESTAMP: 2026-07-27T10:04:52.278726
+TYPE: EMAIL_VERIFICATION
+RECIPIENT: rohith40@gmail.com
+SUBJECT: Verify Your CloudCrackers Email
+BODY:
+Hello rohith,
+
+Welcome to CloudCrackers! Please verify your email by clicking the following link:
+http://127.0.0.1:8000/pages/verify-email.html?token=2cf70fa6-0fbb-43b0-8e8b-539faedfd66b
+
+This link will expire in 24 hours.
+=========================================
+
+=========================================
+TYPE: EMAIL_OTP
+TO: rohith40@gmail.com
+OTP: 505979
+TIMESTAMP: 2026-07-27T10:13:14.079938
+=========================================
+=========================================
+TYPE: EMAIL_OTP
+TO: rohith40@gmail.com
+OTP: 260969
+TIMESTAMP: 2026-07-27T10:13:35.285062
+=========================================
+=========================================
+TYPE: EMAIL_OTP
+TO: rohith40@gmail.com
+OTP: 516403
+TIMESTAMP: 2026-07-27T10:15:15.160878
+=========================================
+=========================================
+TYPE: EMAIL_OTP
+TO: rohith40@gmail.com
+OTP: 464477
+TIMESTAMP: 2026-07-27T10:16:13.797924
+=========================================
+=========================================
+TYPE: EMAIL_OTP
+TO: rohith40@gmail.com
+OTP: 905390
+TIMESTAMP: 2026-07-27T10:17:10.976192
+=========================================
+=========================================
+TYPE: EMAIL_OTP
+TO: rohith40@gmail.com
+OTP: 394976
+TIMESTAMP: 2026-07-27T10:17:33.171807
+=========================================
+=========================================
+TYPE: EMAIL_OTP
+TO: rohith40@gmail.com
+OTP: 961801
+TIMESTAMP: 2026-07-27T10:18:19.275384
+=========================================
+=========================================
+TYPE: EMAIL_OTP
+TO: rohith40@gmail.com
+OTP: 471938
+TIMESTAMP: 2026-07-27T10:19:15.288960
+=========================================
+=========================================
+TIMESTAMP: 2026-07-27T23:01:47.452695
+TYPE: EMAIL_VERIFICATION
+RECIPIENT: raji@gmail.com
+SUBJECT: Verify Your CloudCrackers Email
+BODY:
+Hello raja,
+
+Welcome to CloudCrackers! Please verify your email by clicking the following link:
+http://127.0.0.1:8000/pages/verify-email.html?token=d4ed15f8-d315-47f8-9364-6d891b879703
+
+This link will expire in 24 hours.
+=========================================
+
